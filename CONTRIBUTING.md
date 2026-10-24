@@ -67,7 +67,7 @@
 
 For questions, collaboration, or to report an **unintended** security flaw that lets a lab affect its host system, contact the maintainer:
 
-**Lourdhu Raj Periyanayagam S**
+**LOURDHU RAJ PERIYANAYAGAM S**
 📧 [lourdhuraj143@gmail.com](mailto:lourdhuraj143@gmail.com)
 
 > [!NOTE]
