@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Supplier Connectivity -- Admin{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="admin-nav">
+      <a href="{{ url_for('admin_dashboard') }}">← Back to Dashboard</a>
+    </div>
+    <div class="form-card" style="max-width:640px;">
+      <h2 class="mb-2">Supplier Connectivity Check</h2>
+      <p style="font-size:.88rem; color:var(--plum-light);">Ping a supplier's server to verify network connectivity before placing a wholesale order.</p>
+
+      <div class="form-group">
+        <label>Known Suppliers</label>
+        <select onchange="document.getElementById('hostname').value=this.value">
+          <option value="">-- pick to autofill --</option>
+          {% for s in suppliers %}
+          <option value="{{ s.hostname }}">{{ s.name }} ({{ s.hostname }})</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <form method="post" action="{{ url_for('ping_supplier') }}">
+        <div class="form-group">
+          <label>Hostname</label>
+          <input type="text" id="hostname" name="hostname" value="{{ hostname }}" placeholder="supplier-hostname.example.com" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Ping Supplier</button>
+      </form>
+
+      {% if output %}
+      <h3 class="mt-2">Result</h3>
+      <pre class="code-block">{{ output }}</pre>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

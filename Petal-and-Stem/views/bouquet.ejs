@@ -1,0 +1,53 @@
+<%- include('partials/header') %>
+<div class="container py-5">
+  <div class="row g-5">
+    <div class="col-lg-5">
+      <h1 class="mb-3">Design a custom bouquet</h1>
+      <p class="text-muted measure">Tell us the occasion, the colours and your budget. Share a link to a photo you love and our florists will sketch a design and send you a quote within 24 hours.</p>
+      <div class="arch mt-4 d-none d-lg-block" style="aspect-ratio:4/5"><img src="/images/florist.jpg" alt="A florist's market stall filled with buckets of flowers"></div>
+    </div>
+    <div class="col-lg-7">
+      <% if (!user) { %>
+        <div class="panel panel-sage"><h3>Sign in to start a design</h3><p class="text-muted">We'll send your sketch and quote to the email on your account.</p><a class="btn btn-primary" href="/login?next=/bouquet">Sign in</a> <a class="btn btn-outline-primary" href="/register">Create an account</a></div>
+      <% } else { %>
+      <form class="panel" method="post" action="/bouquet/request" id="bouquetForm">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="row g-3">
+          <div class="col-md-6"><label class="form-label" for="occasion">Occasion</label><select class="form-select" id="occasion" name="occasion"><option>Birthday</option><option>Anniversary</option><option>Sympathy</option><option>New baby</option><option>Thank you</option><option>Just because</option></select></div>
+          <div class="col-md-6"><label class="form-label" for="palette">Colour palette</label><select class="form-select" id="palette" name="palette"><option>Blush and white</option><option>Sunset brights</option><option>Garden whites and greens</option><option>Moody burgundy</option><option>Florist's choice</option></select></div>
+          <div class="col-12"><label class="form-label" for="budget">Budget: <span id="budgetOut">$80</span></label><input type="range" class="form-range" id="budget" name="budget" min="40" max="300" step="10" value="80"></div>
+          <div class="col-12">
+            <label class="form-label" for="url">Inspiration photo link <span class="text-muted fw-normal">(optional)</span></label>
+            <div class="input-group"><input class="form-control" id="url" name="url" type="url" placeholder="https://example.com/my-favourite-bouquet.jpg"><button class="btn btn-outline-primary" type="button" id="previewBtn">Preview</button></div>
+            <div class="form-text">Paste a direct link to an image. We'll fetch it so our florists can see it.</div>
+            <div id="previewArea" class="mt-3"></div>
+          </div>
+          <div class="col-12"><label class="form-label" for="notes">Anything else?</label><textarea class="form-control" id="notes" name="notes" rows="3" maxlength="600" placeholder="Favourite flowers, allergies, vase or no vase…"></textarea></div>
+        </div>
+        <button class="btn btn-primary btn-lg mt-4">Send my request</button>
+      </form>
+      <% } %>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var b = document.getElementById('budget'); if (!b) return;
+  b.addEventListener('input', function () { document.getElementById('budgetOut').textContent = '$' + b.value; });
+  document.getElementById('previewBtn').addEventListener('click', function () {
+    var area = document.getElementById('previewArea'), btn = this;
+    btn.disabled = true; area.innerHTML = '<div class="text-muted"><span class="spinner-border spinner-border-sm"></span> Fetching image…</div>';
+    fetch('/bouquet/preview', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': '<%= csrfToken %>' }, body: JSON.stringify({ url: document.getElementById('url').value }) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        area.innerHTML = '';
+        if (d.ok) { var img = document.createElement('img'); img.src = d.image; img.alt = 'Inspiration preview'; img.className = 'img-fluid rounded-4'; img.style.maxHeight = '320px'; area.appendChild(img); return; }
+        var msg = document.createElement('div'); msg.className = 'alert alert-danger mb-2'; msg.textContent = d.message; area.appendChild(msg);
+        if (d.body) { var pre = document.createElement('pre'); pre.className = 'console'; pre.textContent = d.body; area.appendChild(pre); }
+      })
+      .catch(function () { area.innerHTML = '<div class="alert alert-danger">Preview failed. Try again.</div>'; })
+      .finally(function () { btn.disabled = false; });
+  });
+});
+</script>
+<%- include('partials/footer') %>

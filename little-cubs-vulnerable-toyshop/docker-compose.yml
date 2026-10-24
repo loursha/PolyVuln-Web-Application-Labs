@@ -1,0 +1,27 @@
+version: "3.8"
+
+# ============================================================================
+# Little Cubs Toy Co. -- isolated training lab
+# Start with: docker compose up -d
+# ============================================================================
+services:
+  toyshop:
+    build: .
+    container_name: littlecubs-toyshop
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+    volumes:
+      - toyshop-db:/app/instance
+    networks:
+      - lab-network
+    restart: unless-stopped
+
+networks:
+  lab-network:
+    driver: bridge
+    internal: false   # set to true to fully isolate the lab from the internet
+
+volumes:
+  toyshop-db:

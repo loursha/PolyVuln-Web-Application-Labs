@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Northwind HR{% endblock %} · Northwind HR Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+{% if user %}
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><i class="bi bi-buildings-fill"></i></div>
+      <div class="brand-text">
+        <span class="brand-name">Northwind</span>
+        <span class="brand-sub">HR Portal</span>
+      </div>
+    </div>
+
+    <nav class="nav-list">
+      <a href="{{ url_for('dashboard') }}" class="nav-item {% if active=='dashboard' %}active{% endif %}"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+      <a href="{{ url_for('employees') }}" class="nav-item {% if active=='employees' %}active{% endif %}"><i class="bi bi-people-fill"></i><span>Directory</span></a>
+      <a href="{{ url_for('leave') }}" class="nav-item {% if active=='leave' %}active{% endif %}"><i class="bi bi-calendar-check-fill"></i><span>Leave</span></a>
+      <a href="{{ url_for('documents') }}" class="nav-item {% if active=='documents' %}active{% endif %}"><i class="bi bi-folder-fill"></i><span>Documents</span></a>
+      <a href="{{ url_for('profile') }}" class="nav-item {% if active=='profile' %}active{% endif %}"><i class="bi bi-person-badge-fill"></i><span>My Profile</span></a>
+
+      {% if user['role'] in ['hr','admin'] %}
+      <div class="nav-section">HR Module</div>
+      <a href="{{ url_for('hr_home') }}" class="nav-item {% if active=='hr' %}active{% endif %}"><i class="bi bi-briefcase-fill"></i><span>HR Console</span></a>
+      {% endif %}
+
+      {% if user['role'] == 'admin' %}
+      <div class="nav-section">Administration</div>
+      <a href="{{ url_for('admin_home') }}" class="nav-item {% if active=='admin' %}active{% endif %}"><i class="bi bi-shield-lock-fill"></i><span>User Mgmt</span></a>
+      <a href="{{ url_for('admin_ping') }}" class="nav-item {% if active=='tools' %}active{% endif %}"><i class="bi bi-terminal-fill"></i><span>System Tools</span></a>
+      {% endif %}
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="mini-user">
+        <div class="mini-avatar">{{ user['full_name'][0] }}</div>
+        <div class="mini-meta">
+          <span class="mini-name">{{ user['full_name'] }}</span>
+          <span class="mini-role">{{ user['role']|capitalize }}</span>
+        </div>
+      </div>
+      <a href="{{ url_for('logout') }}" class="logout-btn"><i class="bi bi-box-arrow-right"></i></a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-title">{% block heading %}{% endblock %}</div>
+      <div class="topbar-actions">
+        <div class="badge-role role-{{ user['role'] }}">{{ user['role']|upper }}</div>
+        <span class="topbar-name">{{ user['full_name'] }}</span>
+      </div>
+    </header>
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</div>
+{% else %}
+  {% block auth %}{% endblock %}
+{% endif %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

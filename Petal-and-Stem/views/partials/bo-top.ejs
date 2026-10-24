@@ -1,0 +1,22 @@
+<%- include('head') %>
+<nav class="navbar site-nav px-3" style="height:66px">
+  <a class="navbar-brand brand" href="/">Petal <span class="amp">&amp;</span> Stem <small class="text-muted fs-6" style="font-family:var(--bs-body-font-family)">studio</small></a>
+  <div class="d-flex align-items-center gap-3"><span class="text-muted d-none d-sm-inline"><i class="bi bi-person-badge"></i> <%= user.fullName %> (<%= user.role %>)</span>
+    <form action="/logout" method="post"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn btn-sm btn-outline-primary">Sign out</button></form></div>
+</nav>
+<% if (flash) { %><div class="alert alert-<%= flash.type %> rounded-0 mb-0"><%= flash.message %></div><% } %>
+<div class="container-fluid bo-shell"><div class="row h-100">
+  <aside class="col-md-3 col-lg-2 bo-side p-3">
+    <div class="small text-uppercase opacity-50 mb-2 px-3" style="letter-spacing:.06em">Studio</div>
+    <a href="/staff" class="<%= path === '/staff' ? 'active' : '' %>"><i class="bi bi-list-check"></i> Order queue</a>
+    <a href="/staff/diagnostics" class="<%= path === '/staff/diagnostics' ? 'active' : '' %>"><i class="bi bi-broadcast"></i> Hub diagnostics</a>
+    <a href="/staff/logs" class="<%= path === '/staff/logs' ? 'active' : '' %>"><i class="bi bi-journal-text"></i> Activity log</a>
+    <% if (user.role === 'admin') { %>
+    <div class="small text-uppercase opacity-50 mt-4 mb-2 px-3" style="letter-spacing:.06em">Admin</div>
+    <a href="/admin" class="<%= path === '/admin' ? 'active' : '' %>"><i class="bi bi-graph-up"></i> Dashboard</a>
+    <a href="/admin/users" class="<%= path === '/admin/users' ? 'active' : '' %>"><i class="bi bi-people"></i> Customers &amp; staff</a>
+    <a href="/admin/products" class="<%= path === '/admin/products' ? 'active' : '' %>"><i class="bi bi-flower2"></i> Catalogue</a>
+    <% } %>
+    <a href="/" class="mt-4"><i class="bi bi-shop"></i> View shop</a>
+  </aside>
+  <main class="col-md-9 col-lg-10 p-4">

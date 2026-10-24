@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Create Account -- Wick & Wax Co.{% endblock %}
+{% block content %}
+<div class="form-card">
+  <h2 class="text-center mb-2">Create Your Account</h2>
+  <form method="post" action="{{ url_for('register') }}">
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" name="username" required autofocus>
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" name="email" required>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" name="password" required>
+    </div>
+    <!-- Client-side role flag: server trusts this value as-is (CWE-266). -->
+    <input type="hidden" name="is_admin" value="0">
+    <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+  </form>
+  <p class="text-center mt-2" style="font-size:.88rem;">
+    Already have an account? <a href="{{ url_for('login') }}">Log in</a>
+  </p>
+</div>
+{% endblock %}

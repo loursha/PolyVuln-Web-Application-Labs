@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card auth-card">
+  <div class="brand">
+    <img src="{{ url_for('static', filename='img/logo.svg') }}" width="38" height="38" alt="logo">
+    <span>EduCore</span>
+  </div>
+  <h5 class="text-center mb-1">Reset password</h5>
+  <p class="text-center hint mb-4">Enter your username to reset your password</p>
+  {% if info %}<div class="alert alert-info py-2">{{ info }}</div>{% endif %}
+  <form method="post">
+    <div class="mb-3">
+      <label class="form-label">Username</label>
+      <input name="username" class="form-control" required>
+    </div>
+    <button class="btn btn-brand w-100 py-2">Reset</button>
+  </form>
+  <p class="text-center mt-3 mb-0">
+    <a href="{{ url_for('login') }}" class="hint text-decoration-none">Back to sign in</a>
+  </p>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+<%- include('partials/header') %>
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <span class="cutoff mb-4"><i class="bi bi-clock"></i> Same-day delivery if you order by 2pm</span>
+        <h1 class="mb-4">Flowers cut this morning, at their door by evening.</h1>
+        <p class="lede mb-4">We buy fresh at the Portland flower market every day at dawn and arrange each bouquet by hand in our Greenhouse Row studio.</p>
+        <div class="d-flex flex-wrap gap-2">
+          <a class="btn btn-primary btn-lg" href="/shop">Shop today's flowers</a>
+          <a class="btn btn-outline-primary btn-lg" href="/bouquet">Design your own</a>
+        </div>
+        <div class="d-flex gap-4 mt-5 text-muted">
+          <div><strong class="d-block text-dark fs-5">4.9 / 5</strong>from 2,300 deliveries</div>
+          <div><strong class="d-block text-dark fs-5">7-day</strong>freshness promise</div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="arch hero-arch">
+          <img src="/images/hero.jpg" alt="Buckets of fresh chrysanthemums, roses and gerberas at the flower market">
+        </div>
+        <div class="position-relative d-none d-md-block"><div class="hero-tag" style="bottom:2.5rem"><strong>In season now</strong>Blush peonies and coral charms, while they last.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-sage">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+      <h2 class="mb-0">This week's favourites</h2>
+      <a href="/shop">See all flowers</a>
+    </div>
+    <div class="row g-4">
+      <% featured.forEach(p => { %><div class="col-6 col-md-4"><%- include('partials/product-card', { p }) %></div><% }) %>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="mb-5">How delivery works</h2>
+    <div class="row g-5">
+      <div class="col-md-4"><div class="step-n mb-2">1</div><h3>Choose your flowers</h3><p class="text-muted">Pick a ready-made bouquet or brief us on a custom design. Add a handwritten card message.</p></div>
+      <div class="col-md-4"><div class="step-n mb-2">2</div><h3>We arrange by hand</h3><p class="text-muted">A florist conditions every stem, builds your arrangement and photographs it before it leaves.</p></div>
+      <div class="col-md-4"><div class="step-n mb-2">3</div><h3>Delivered same day</h3><p class="text-muted">Our own drivers deliver in water-filled boxes across Portland, Beaverton and Gresham.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-forest">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-5"><div class="arch" style="aspect-ratio:4/5"><img src="/images/wedding.jpg" alt="Bride holding a blush bouquet"></div></div>
+      <div class="col-lg-7">
+        <h2 class="mb-3">Wedding and event flowers</h2>
+        <p class="measure mb-4">From a single bridal bouquet to full venue styling, our event team plans every arrangement with you. Book a free consultation at least three weeks before the day.</p>
+        <a href="/shop?category=Weddings" class="btn btn-peony">Browse wedding flowers</a>
+        <div class="row g-4 mt-4">
+          <% reviews.forEach(r => { %>
+          <div class="col-md-4"><div class="stars mb-1"><%= '★'.repeat(r.rating) %></div><p class="mb-1"><%= r.body %></p><small class="opacity-75"><%= r.full_name %> · <%= r.product %></small></div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include('partials/footer') %>

@@ -1,0 +1,39 @@
+# Petal & Stem - intentionally vulnerable training lab.
+# Binds to 127.0.0.1 only. Do not expose to untrusted networks.
+services:
+  db:
+    image: mysql:8.0
+    container_name: petalstem-db
+    environment:
+      MYSQL_ROOT_PASSWORD: R00t_Petal_Lab!
+    command: ["--default-authentication-plugin=mysql_native_password", "--local-infile=0"]
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-pR00t_Petal_Lab!"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    networks: [lab]
+
+  app:
+    build: .
+    container_name: petalstem-app
+    env_file: .env
+    environment:
+      DB_HOST: db
+    ports:
+      - "127.0.0.1:8080:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [lab]
+    restart: unless-stopped
+
+networks:
+  lab:
+    driver: bridge
+
+volumes:
+  dbdata:

@@ -1,0 +1,27 @@
+# Isolation: DB reachable only from the app; app egress limited to DB + DNS.
+# Blocks SSRF from reaching cloud metadata or the wider cluster (needs a CNI that enforces NetworkPolicy).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: db-from-app-only
+  namespace: fetedecadre-lab
+spec:
+  podSelector: { matchLabels: { app: fetedecadre-db } }
+  policyTypes: [Ingress]
+  ingress:
+    - from: [{ podSelector: { matchLabels: { app: fetedecadre-app } } }]
+      ports: [{ port: 3306 }]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: app-egress-restricted
+  namespace: fetedecadre-lab
+spec:
+  podSelector: { matchLabels: { app: fetedecadre-app } }
+  policyTypes: [Egress]
+  egress:
+    - to: [{ podSelector: { matchLabels: { app: fetedecadre-db } } }]
+      ports: [{ port: 3306 }]
+    - to: [{ namespaceSelector: {} }]
+      ports: [{ port: 53, protocol: UDP }, { port: 53, protocol: TCP }]

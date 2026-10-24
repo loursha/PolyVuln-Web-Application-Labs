@@ -1,0 +1,67 @@
+version: "3.8"
+
+# ============================================================================
+# StrideStyle Footwear Co. -- isolated training lab
+# Start with: docker compose up -d
+# First boot seeds the database automatically via the backend's entrypoint.
+# ============================================================================
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: stridestyle-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw_lab_only
+      MYSQL_DATABASE: footwear_shop
+      MYSQL_USER: footwear_app
+      MYSQL_PASSWORD: FootwearApp2024!
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./backend/config/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    ports:
+      - "3306:3306"
+    networks:
+      - lab-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpw_lab_only"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: stridestyle-backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=footwear_app
+      - DB_PASSWORD=FootwearApp2024!
+      - DB_NAME=footwear_shop
+      - NODE_ENV=development
+    command: sh -c "node seed.js && node server.js"
+    ports:
+      - "4000:4000"
+    networks:
+      - lab-network
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: stridestyle-frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    networks:
+      - lab-network
+    restart: unless-stopped
+
+networks:
+  lab-network:
+    driver: bridge
+    internal: false   # set to true to fully isolate the lab from the internet
+
+volumes:
+  mysql-data:

@@ -1,0 +1,17 @@
+<%- include('partials/head') %>
+<div class="min-vh-100 d-flex align-items-center justify-content-center" style="background:var(--forest)">
+  <div class="bg-white rounded-4 p-4 p-md-5 shadow" style="max-width:420px;width:92%">
+    <div class="brand mb-1">Petal <span class="amp">&amp;</span> Stem</div>
+    <p class="text-muted mb-4">Studio and admin sign in</p>
+    <% if (error) { %><div class="alert alert-danger"><%= error %></div><% } %>
+    <form method="post" action="/backoffice/login">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <div class="mb-3"><label class="form-label" for="username">Username</label><input class="form-control" id="username" name="username" autocomplete="username" required value="<%= username %>"></div>
+      <div class="mb-4"><label class="form-label" for="password">Password</label><input class="form-control" type="password" id="password" name="password" autocomplete="current-password" required></div>
+      <button class="btn btn-primary w-100 btn-lg">Sign in</button>
+    </form>
+    <p class="small text-muted mt-4 mb-0"><a href="/">Back to the shop</a></p>
+  </div>
+</div>
+<script src="/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+</body></html>

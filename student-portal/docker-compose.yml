@@ -1,0 +1,8 @@
+services:
+  educore:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - APP_SECRET=dev-secret-please-change
+      - DB_ADMIN_PW=SuperSecretDbPass!23

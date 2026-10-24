@@ -1,0 +1,30 @@
+# ============================================================================
+# requirements-run.txt
+#
+# requirements.txt (in this same folder) documents the INTENTIONALLY OLD,
+# vulnerable dependency pins that satisfy VULNERABILITY #9 (CWE-1035 /
+# CWE-1395, Using Components with Known Vulnerabilities) for the
+# vulnerability matrix in README.md.
+#
+# Those exact versions (Flask 0.12.2, Werkzeug 0.15.4, etc.) predate
+# Python 3.10+ and will not install/run on a modern Python 3.11+
+# interpreter. To keep the LAB ACTUALLY RUNNABLE on current systems while
+# still preserving every intentional application-level vulnerability in
+# app.py, install from THIS file instead:
+#
+#     pip install -r requirements-run.txt --break-system-packages
+#
+# Still flagged and still within OWASP A03:2025 scope: Flask 2.0.x /
+# Werkzeug 2.0.x below are themselves several years old and have their own
+# subsequent CVEs (e.g. Werkzeug debugger PIN issues), so `pip-audit` or
+# `safety check` run against this file will still surface real, valid
+# findings for the "Software Supply Chain Failures" lab exercise -- they
+# are simply new enough to execute on modern Python.
+# ============================================================================
+Flask==2.0.1
+Werkzeug==2.0.1
+Jinja2==3.0.1
+itsdangerous==2.0.1
+click==8.0.1
+requests==2.25.1
+MarkupSafe==2.0.1

@@ -1,0 +1,45 @@
+<%- include('head') %>
+<div class="topbar py-2">
+  <div class="container d-flex justify-content-between align-items-center">
+    <span><i class="bi bi-truck me-1"></i> Order by 2pm for same-day delivery across Portland</span>
+    <span class="d-none d-md-inline"><a href="/track">Track an order</a> <span class="mx-2 opacity-50">|</span> <a href="/backoffice/login">Staff</a></span>
+  </div>
+</div>
+<nav class="navbar navbar-expand-lg site-nav sticky-top">
+  <div class="container">
+    <a class="navbar-brand brand" href="/">Petal <span class="amp">&amp;</span> Stem</a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto ms-lg-3">
+        <li class="nav-item"><a class="nav-link <%= path === '/shop' ? 'active' : '' %>" href="/shop">Shop</a></li>
+        <li class="nav-item"><a class="nav-link <%= path === '/bouquet' ? 'active' : '' %>" href="/bouquet">Custom bouquet</a></li>
+        <li class="nav-item"><a class="nav-link <%= path === '/shop' ? '' : '' %>" href="/shop?category=Weddings">Weddings</a></li>
+        <li class="nav-item"><a class="nav-link <%= path === '/members' ? 'active' : '' %>" href="/members">Petal Club</a></li>
+      </ul>
+      <form class="nav-search me-lg-3 my-2 my-lg-0" action="/shop" method="get" role="search">
+        <input class="form-control" type="search" name="q" placeholder="Search flowers" aria-label="Search flowers">
+      </form>
+      <ul class="navbar-nav align-items-lg-center">
+        <li class="nav-item me-lg-2"><a class="nav-link cart-pill" href="/cart" aria-label="Basket"><i class="bi bi-basket2 fs-5"></i><% if (cartCount) { %><span class="badge rounded-pill"><%= cartCount %></span><% } %></a></li>
+        <% if (user) { %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle me-1"></i><%= user.fullName.split(' ')[0] %></a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="/account">Your account</a></li>
+              <% if (user.role !== 'customer') { %><li><a class="dropdown-item" href="/staff">Studio queue</a></li><% } %>
+              <% if (user.role === 'admin') { %><li><a class="dropdown-item" href="/admin">Admin dashboard</a></li><% } %>
+              <li><hr class="dropdown-divider"></li>
+              <li><form action="/logout" method="post" class="px-3"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn btn-link p-0 text-decoration-none text-danger">Sign out</button></form></li>
+            </ul>
+          </li>
+        <% } else { %>
+          <li class="nav-item"><a class="btn btn-primary btn-sm ms-lg-2" href="/login">Sign in</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</nav>
+<% if (flash) { %>
+  <div class="container mt-3"><div class="alert alert-<%= flash.type %> alert-dismissible fade show" role="alert"><%= flash.message %><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div></div>
+<% } %>
+<main>

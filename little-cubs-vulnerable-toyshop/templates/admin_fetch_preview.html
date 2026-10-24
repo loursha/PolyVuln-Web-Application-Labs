@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Import Product Image -- Admin{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="admin-nav">
+      <a href="{{ url_for('admin_dashboard') }}">← Back to Dashboard</a>
+    </div>
+    <div class="form-card" style="max-width:640px;">
+      <h2 class="mb-2">Import Product Photo from URL</h2>
+      <p style="font-size:.88rem; color:var(--denim-light);">Paste a photo URL from a supplier's catalog and we'll fetch a preview before you attach it to a product.</p>
+
+      <form method="post" action="{{ url_for('fetch_image_preview') }}">
+        <div class="form-group">
+          <label>Image URL</label>
+          <input type="url" name="image_url" placeholder="https://supplier.example.com/photos/toy.jpg" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Fetch Preview</button>
+      </form>
+
+      {% if error %}
+      <div class="alert alert-danger mt-2">Error fetching URL: {{ error }}</div>
+      {% endif %}
+
+      {% if preview %}
+      <div class="mt-2">
+        <h3>Preview Result</h3>
+        <table class="data-table">
+          <tr><td>URL</td><td>{{ preview.url }}</td></tr>
+          <tr><td>Status Code</td><td>{{ preview.status_code }}</td></tr>
+          <tr><td>Content-Type</td><td>{{ preview.content_type }}</td></tr>
+        </table>
+        <h4 class="mt-1">Response Body (first 2000 chars)</h4>
+        <pre class="code-block">{{ preview.body_snippet }}</pre>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

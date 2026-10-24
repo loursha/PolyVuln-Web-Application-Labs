@@ -1,0 +1,15 @@
+-- MySQL dump 10.13  Distrib 8.0.36, for Linux (x86_64)
+-- Host: 127.0.0.1    Database: petalstem
+-- ------------------------------------------------------
+-- Dump completed on 2024-03-01  02:00:04 (partial: users, coupons)
+
+LOCK TABLES `users` WRITE;
+INSERT INTO `users` (`id`,`username`,`email`,`password_hash`,`full_name`,`role`) VALUES
+(1,'admin','admin@petalstem.local','5f4dcc3b5aa765d61d8327deb882cf99','Ivy Hart','admin'),
+(2,'florist','florist@petalstem.local','765f4794ada9845ac05871c17ca4a74a','Fern Okafor','staff'),
+(3,'daisy','daisy@example.com','1b3c2c45d0a977b508f637097a94cbfb','Daisy Moreno','customer');
+UNLOCK TABLES;
+
+LOCK TABLES `coupons` WRITE;
+INSERT INTO `coupons` VALUES ('STAFFONLY50',50,'2024-12-31 23:59:59',0),('SPRING15',15,'2027-12-31 23:59:59',1);
+UNLOCK TABLES;

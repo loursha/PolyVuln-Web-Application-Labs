@@ -1,0 +1,6 @@
+.git
+logs/*.log
+storage/invoices/*.pdf
+storage/uploads/*
+*.zip
+node_modules

@@ -1,0 +1,40 @@
+<%- include('partials/header') %>
+<div class="container py-5">
+  <div class="row align-items-end mb-4 g-3">
+    <div class="col-lg-7">
+      <h1 class="mb-2"><%= category || 'All flowers' %></h1>
+      <% if (term) { %>
+        <% if (blocked) { %>
+          <p class="text-muted mb-0">Your search contains characters that aren't allowed. Showing results for <strong><%= term %></strong>.</p>
+        <% } else { %>
+          <p class="text-muted mb-0"><%= products.length %> result<%= products.length === 1 ? '' : 's' %> for <strong><%- term %></strong></p>
+        <% } %>
+      <% } else { %>
+        <p class="text-muted mb-0">Fresh from this morning's market. <%= products.length %> arrangements available.</p>
+      <% } %>
+    </div>
+    <div class="col-lg-5">
+      <form class="d-flex gap-2" method="get" action="/shop">
+        <% if (category) { %><input type="hidden" name="category" value="<%= category %>"><% } %>
+        <input class="form-control" type="search" name="q" value="<%= term %>" placeholder="Search by flower or colour" aria-label="Search">
+        <select class="form-select w-auto" name="sort" aria-label="Sort" onchange="this.form.submit()">
+          <option value="">Featured</option>
+          <option value="price_asc" <%= sort === 'price_asc' ? 'selected' : '' %>>Price: low to high</option>
+          <option value="price_desc" <%= sort === 'price_desc' ? 'selected' : '' %>>Price: high to low</option>
+          <option value="name" <%= sort === 'name' ? 'selected' : '' %>>Name</option>
+        </select>
+      </form>
+    </div>
+  </div>
+  <div class="mb-4">
+    <a class="chip <%= !category ? 'active' : '' %>" href="/shop">All</a>
+    <% categories.forEach(c => { %><a class="chip <%= category === c ? 'active' : '' %>" href="/shop?category=<%= c %>"><%= c %></a><% }) %>
+  </div>
+  <% if (!products.length) { %>
+    <div class="panel panel-sage text-center py-5"><h3>Nothing matches that search</h3><p class="text-muted">Try a flower name like "rose" or "tulip", or browse all flowers.</p><a class="btn btn-primary" href="/shop">Browse all flowers</a></div>
+  <% } %>
+  <div class="row g-4">
+    <% products.forEach(p => { %><div class="col-6 col-md-4 col-lg-3"><%- include('partials/product-card', { p }) %></div><% }) %>
+  </div>
+</div>
+<%- include('partials/footer') %>

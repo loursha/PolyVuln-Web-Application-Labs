@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="page-title">Enroll Student</h3>
+<div class="card"><div class="card-body">
+  <form method="post" style="max-width:600px">
+    <div class="mb-3"><label class="form-label">Name</label>
+      <input name="name" class="form-control" required></div>
+    <div class="mb-3"><label class="form-label">Grade</label>
+      <input name="grade" class="form-control" required></div>
+    <div class="mb-3"><label class="form-label">Bio / Notes</label>
+      <textarea name="bio" class="form-control" rows="4"></textarea>
+      <div class="hint mt-1">Bio is displayed on the student profile.</div></div>
+    <button class="btn btn-brand">Save</button>
+  </form>
+</div></div>
+{% endblock %}

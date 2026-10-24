@@ -1,0 +1,20 @@
+{
+  "name": "antiquary-relic-backend",
+  "version": "1.0.0",
+  "description": "The Antiquary & Relic Co. -- intentionally vulnerable training backend (Node/Express/MySQL)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node seed.js"
+  },
+  "dependencies": {
+    "express": "4.18.2",
+    "mysql2": "3.6.0",
+    "express-session": "1.17.3",
+    "cookie-parser": "1.4.6",
+    "multer": "1.4.5-lts.1",
+    "cors": "2.8.5",
+    "body-parser": "1.20.2",
+    "morgan": "1.10.0"
+  }
+}

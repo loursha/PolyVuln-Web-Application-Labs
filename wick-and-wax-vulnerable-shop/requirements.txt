@@ -1,0 +1,27 @@
+# ============================================================================
+# VULNERABILITY #9 - CWE-1035 / CWE-1395 Using Components with Known
+# Vulnerabilities (OWASP A03:2025 Software Supply Chain Failures)
+#
+# These versions are pinned intentionally OLD for training purposes. They
+# contain publicly documented CVEs. DO NOT use these pins in any real
+# project -- upgrade to current patched releases instead.
+#
+#   Flask==0.12.2   -> CVE-2019-1010083 (DoS via crafted multipart request),
+#                      predates many security hardening fixes.
+#   Werkzeug==0.15.4 -> CVE-2019-14806 (header injection),
+#                       CVE-2020-28724wrelated debugger RCE issues in older lines.
+#   Jinja2==2.10     -> CVE-2019-10906 (sandbox escape leading to RCE via
+#                       str.format_map in the Jinja2 sandboxed environment).
+#   PyYAML==5.1      -> CVE-2020-1747 / CVE-2020-14343 (unsafe yaml.load
+#                       leading to arbitrary code execution).
+#   requests==2.19.1 -> CVE-2018-18074 (Authorization header leak on
+#                       cross-domain redirect).
+# ============================================================================
+Flask==0.12.2
+Werkzeug==0.15.4
+Jinja2==2.10
+PyYAML==5.1
+requests==2.19.1
+itsdangerous==0.24
+MarkupSafe==1.1.1
+click==6.7

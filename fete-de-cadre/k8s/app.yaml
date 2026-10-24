@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fetedecadre-app
+  namespace: fetedecadre-lab
+spec:
+  replicas: 1          # keep at 1: the activity log and rate-limit state are per-pod
+  selector: { matchLabels: { app: fetedecadre-app } }
+  template:
+    metadata: { labels: { app: fetedecadre-app } }
+    spec:
+      containers:
+        - name: app
+          image: fetedecadre-app:1.0
+          imagePullPolicy: IfNotPresent
+          envFrom: [{ secretRef: { name: fetedecadre-env } }]
+          ports: [{ containerPort: 80 }]
+          readinessProbe:
+            httpGet: { path: /, port: 80 }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            limits: { cpu: "500m", memory: 384Mi }
+---
+# NodePort (not kubectl port-forward): port-forward connects from 127.0.0.1 inside the
+# pod, which would expose the loopback-only SSRF target directly and spoil that exercise.
+apiVersion: v1
+kind: Service
+metadata:
+  name: fetedecadre-app
+  namespace: fetedecadre-lab
+spec:
+  type: NodePort
+  selector: { app: fetedecadre-app }
+  ports: [{ port: 80, targetPort: 80, nodePort: 30081 }]

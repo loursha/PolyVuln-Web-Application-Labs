@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="page-title mb-0">Students</h3>
+  <a href="{{ url_for('student_add') }}" class="btn btn-brand">+ Enroll Student</a>
+</div>
+
+<form class="mb-3" method="get">
+  <div class="input-group" style="max-width:420px">
+    <input name="q" value="{{ q }}" class="form-control" placeholder="Search by name or grade">
+    <button class="btn btn-brand">Search</button>
+  </div>
+</form>
+
+<div class="card">
+  <div class="card-body">
+    <table class="table align-middle mb-0">
+      <thead><tr><th>ID</th><th>Name</th><th>Grade</th><th></th></tr></thead>
+      <tbody>
+        {% for s in rows %}
+        <tr>
+          <td>{{ s['id'] }}</td>
+          <td>{{ s['name'] }}</td>
+          <td><span class="badge bg-secondary">{{ s['grade'] }}</span></td>
+          <td class="text-end"><a href="{{ url_for('student_view', sid=s['id']) }}" class="btn btn-sm btn-outline-primary">View</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="text-center hint py-4">No students found</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

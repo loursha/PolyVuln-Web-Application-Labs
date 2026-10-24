@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="page-title">Dashboard</h3>
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="stat-card stat-1">
+      <div class="label">Total Students</div>
+      <h2>{{ total_students }}</h2>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="stat-card stat-2">
+      <div class="label">Courses Offered</div>
+      <h2>{{ total_courses }}</h2>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="stat-card stat-3">
+      <div class="label">Portal Users</div>
+      <h2>{{ total_users }}</h2>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <h5 class="mb-3">Recently Enrolled</h5>
+    <table class="table align-middle mb-0">
+      <thead><tr><th>#</th><th>Name</th><th>Grade</th><th></th></tr></thead>
+      <tbody>
+        {% for s in recent %}
+        <tr>
+          <td><div class="avatar">{{ s['name'][0] }}</div></td>
+          <td>{{ s['name'] }}</td>
+          <td><span class="badge bg-secondary">{{ s['grade'] }}</span></td>
+          <td class="text-end"><a href="{{ url_for('student_view', sid=s['id']) }}" class="btn btn-sm btn-outline-primary">View</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

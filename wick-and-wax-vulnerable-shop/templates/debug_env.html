@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}System Diagnostics{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <h1 class="section-title" style="text-align:left;">System Diagnostics</h1>
+    <p class="section-subtitle" style="text-align:left;">Internal environment dump (no authentication required to view this page).</p>
+
+    {% if extra %}
+    <h3 class="mb-1">Runtime Info</h3>
+    <table class="data-table mb-2">
+      <tr><td>Python Version</td><td>{{ extra.python_version }}</td></tr>
+      <tr><td>Flask Debug</td><td>{{ extra.flask_debug }}</td></tr>
+      <tr><td>Database Path</td><td>{{ extra.db_path }}</td></tr>
+      <tr><td>Secret Key</td><td>{{ extra.secret_key }}</td></tr>
+      <tr><td>Working Directory</td><td>{{ extra.cwd }}</td></tr>
+    </table>
+    {% endif %}
+
+    <h3 class="mb-1">Environment Variables</h3>
+    <table class="data-table env-table">
+      {% for k, v in env.items() %}
+      <tr><td>{{ k }}</td><td>{{ v }}</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+</section>
+{% endblock %}

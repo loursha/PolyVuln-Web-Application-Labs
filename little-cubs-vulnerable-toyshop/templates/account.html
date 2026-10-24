@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}My Account -- Little Cubs Toy Co.{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <h1 class="section-title" style="text-align:left;">My Account</h1>
+
+    <div style="display:grid; grid-template-columns: 1fr 1.4fr; gap: 30px; align-items:start;">
+      <div class="form-card" style="margin:0;">
+        <div class="text-center mb-2">
+          <img src="{{ url_for('static', filename='uploads/' + user.avatar) if user.avatar != 'default-avatar.jpg' else url_for('static', filename='images/default-avatar.jpg') }}"
+               alt="avatar" class="avatar-sm" style="width:90px;height:90px;">
+        </div>
+        <h3>Profile</h3>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Member since:</strong> {{ user.created_at }}</p>
+
+        <!-- No CSRF token here -- see VULNERABILITY #2 -->
+        <form action="{{ url_for('update_email') }}" method="post" class="mt-2">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" name="email" value="{{ user.email }}" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Update Email</button>
+        </form>
+
+        <form action="{{ url_for('upload_avatar') }}" method="post" enctype="multipart/form-data" class="mt-2">
+          <div class="form-group">
+            <label>Change Avatar</label>
+            <input type="file" name="avatar" accept="image/*">
+          </div>
+          <button type="submit" class="btn btn-outline btn-block">Upload</button>
+        </form>
+      </div>
+
+      <div>
+        <h3>Order History</h3>
+        {% if orders %}
+        <table class="data-table">
+          <thead><tr><th>Order #</th><th>Date</th><th>Status</th><th>Total</th><th>Invoice</th></tr></thead>
+          <tbody>
+          {% for o in orders %}
+            <tr>
+              <td>#{{ o.id }}</td>
+              <td>{{ o.created_at }}</td>
+              <td>{{ o.status }}</td>
+              <td>${{ "%.2f"|format(o.total) }}</td>
+              <td><a href="{{ url_for('download_invoice', filename='order-' + o.id|string + '.txt') }}">Download</a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+          <div class="icon">📦</div>
+          <p>No orders yet. <a href="{{ url_for('shop') }}">Start shopping</a></p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

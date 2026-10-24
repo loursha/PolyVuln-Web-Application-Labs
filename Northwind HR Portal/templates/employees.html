@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% set active='employees' %}
+{% block title %}Directory{% endblock %}
+{% block heading %}Employee Directory{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div><h3 style="margin:0;font-size:18px">Team Members</h3><p>Search across the organization</p></div>
+</div>
+
+<div class="panel" style="margin-bottom:20px">
+  <form method="get" class="d-flex gap-2">
+    <input class="form-control" name="q" value="{{ q }}" placeholder="Search by name, department or title…">
+    <button class="btn-grad" type="submit"><i class="bi bi-search"></i> Search</button>
+  </form>
+</div>
+
+{% if error %}
+<div class="alert-soft alert-danger-soft">{{ error }}</div>
+{% endif %}
+
+<div class="panel">
+  <table class="tbl">
+    <thead><tr><th>Employee</th><th>Email</th><th>Department</th><th>Title</th><th>Role</th><th>Salary</th></tr></thead>
+    <tbody>
+    {% for r in rows %}
+      <tr>
+        <td>
+          {% if r['id'] is number or (r['id'] is string and r['id'].isdigit()) %}
+          <a href="{{ url_for('employee_detail', eid=r['id']) }}">
+            <span class="avatar-sm">{{ (r['full_name'] or '?')[0] }}</span>{{ r['full_name'] }}
+          </a>
+          {% else %}
+          <span class="avatar-sm">{{ (r['full_name'] or '?')[0] }}</span>{{ r['full_name'] }}
+          {% endif %}
+        </td>
+        <td>{{ r['email'] }}</td>
+        <td>{{ r['department'] }}</td>
+        <td>{{ r['title'] }}</td>
+        <td><span class="badge-role role-{{ r['role'] }}">{{ r['role']|upper }}</span></td>
+        <td>${{ '{:,}'.format(r['salary']) if r['salary'] else '—' }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="6" class="text-center text-muted py-4">No results found.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

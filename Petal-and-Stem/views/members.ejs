@@ -1,0 +1,20 @@
+<%- include('partials/header') %>
+<div class="container py-5">
+  <% if (!isVip) { %>
+  <div class="row g-5 align-items-center">
+    <div class="col-lg-6">
+      <h1 class="mb-3">Petal Club Reserve</h1>
+      <p class="lede text-muted measure">Members get 15% off every order, free delivery and first pick of the morning market in the Reserve collection.</p>
+      <p class="measure">Petal Club membership is by invitation for customers who order regularly. Keep an eye on your inbox after your third order.</p>
+      <a class="btn btn-primary" href="/shop">Shop flowers</a>
+    </div>
+    <div class="col-lg-6"><div class="arch" style="aspect-ratio:4/5;filter:grayscale(.6)"><img src="/images/products/reserve.jpg" alt="Market flowers reserved for members"></div></div>
+  </div>
+  <% } else { %>
+  <h1 class="mb-2">Petal Club Reserve</h1>
+  <p class="text-muted mb-4">Welcome back. Your 15% member discount and free delivery are applied automatically at checkout.</p>
+  <div class="row g-4"><% products.forEach(p => { %><div class="col-6 col-md-4"><%- include('partials/product-card', { p }) %></div><% }) %></div>
+  <div class="panel panel-sage mt-4"><strong>Member note:</strong> FLAG{proto_pollution_bought_a_membership} is printed on every Reserve gift card this season.</div>
+  <% } %>
+</div>
+<%- include('partials/footer') %>

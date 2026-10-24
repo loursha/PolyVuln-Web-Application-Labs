@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% set active='hr' %}
+{% block title %}HR Console{% endblock %}
+{% block heading %}HR Console{% endblock %}
+{% block content %}
+
+<div class="stat-grid" style="grid-template-columns:repeat(3,1fr)">
+  <div class="stat"><div class="icon i-amber"><i class="bi bi-hourglass-split"></i></div>
+    <div class="val">{{ leave_rows|selectattr('status','equalto','Pending')|list|length }}</div><div class="lbl">Pending Approvals</div></div>
+  <div class="stat"><div class="icon i-green"><i class="bi bi-cash-stack"></i></div>
+    <div class="val">{{ payroll_rows|length }}</div><div class="lbl">Payroll Records</div></div>
+  <div class="stat"><div class="icon i-blue"><i class="bi bi-calendar-check"></i></div>
+    <div class="val">{{ leave_rows|length }}</div><div class="lbl">Total Leave Requests</div></div>
+</div>
+
+<div class="panel" style="margin-bottom:22px">
+  <h3><i class="bi bi-calendar-check-fill text-primary"></i> Leave Approvals</h3>
+  <table class="tbl">
+    <thead><tr><th>Employee</th><th>Type</th><th>Dates</th><th>Reason</th><th>Status</th><th>Action</th></tr></thead>
+    <tbody>
+    {% for r in leave_rows %}
+      <tr>
+        <td>{{ r['full_name'] }}</td>
+        <td>{{ r['leave_type'] }}</td>
+        <td>{{ r['start_date'] }} → {{ r['end_date'] }}</td>
+        <!-- Stored XSS sink -->
+        <td>{{ r['reason']|safe }}</td>
+        <td><span class="pill {{ r['status'] }}">{{ r['status'] }}</span></td>
+        <td>
+          {% if r['status']=='Pending' %}
+          <!-- CSRF: state change via GET -->
+          <a href="{{ url_for('hr_leave_action', lid=r['id'], action='approve') }}" class="btn btn-sm btn-success">Approve</a>
+          <a href="{{ url_for('hr_leave_action', lid=r['id'], action='reject') }}" class="btn btn-sm btn-danger">Reject</a>
+          {% else %}<span class="text-muted">—</span>{% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="grid-2">
+  <div class="panel">
+    <h3><i class="bi bi-cash-coin text-primary"></i> Payroll Overview</h3>
+    <table class="tbl">
+      <thead><tr><th>Employee</th><th>Period</th><th>Gross</th><th>Tax</th><th>Net</th></tr></thead>
+      <tbody>
+      {% for p in payroll_rows %}
+        <tr><td>{{ p['full_name'] }}</td><td>{{ p['period'] }}</td>
+        <td>${{ '{:,}'.format(p['gross']) }}</td><td>${{ '{:,}'.format(p['tax']) }}</td>
+        <td>${{ '{:,}'.format(p['net']) }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h3><i class="bi bi-megaphone-fill text-primary"></i> Post Announcement</h3>
+    <form method="post" action="{{ url_for('hr_announce') }}">
+      <div class="mb-3"><label>Title</label><input class="form-control" name="title"></div>
+      <div class="mb-3"><label>Message</label><textarea class="form-control" name="body" rows="4"></textarea></div>
+      <button class="btn-grad w-100" type="submit">Publish</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

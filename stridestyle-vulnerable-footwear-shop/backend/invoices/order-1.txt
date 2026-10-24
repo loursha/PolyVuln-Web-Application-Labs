@@ -1,0 +1,13 @@
+==========================================
+ StrideStyle Footwear Co. -- Order Invoice
+==========================================
+Order #: 1
+Customer: jordan
+Items:
+  1x Velocity Runner        $89.99
+  1x Coastal Slide Sandal   $39.99
+------------------------------------------
+Total: $164.98
+Shipping: 88 Birchwood Ave, Denver, CO 80202
+==========================================
+Thank you for shopping with us!

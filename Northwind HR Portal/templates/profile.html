@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% set active='profile' %}
+{% block title %}My Profile{% endblock %}
+{% block heading %}My Profile{% endblock %}
+{% block content %}
+
+<div class="grid-2">
+  <div class="panel">
+    <div class="d-flex align-items-center gap-3 mb-4">
+      <div class="mini-avatar" style="width:64px;height:64px;font-size:26px;border-radius:16px">{{ user['full_name'][0] }}</div>
+      <div>
+        <h3 style="margin:0;font-size:22px">{{ user['full_name'] }}</h3>
+        <div class="text-muted">{{ user['title'] }} · {{ user['department'] }}</div>
+      </div>
+    </div>
+    <h3><i class="bi bi-pencil-square text-primary"></i> Edit Details</h3>
+    <form method="post">
+      <div class="mb-3"><label>Phone</label><input class="form-control" name="phone" value="{{ user['phone'] }}"></div>
+      <div class="mb-3"><label>Bio (supports rich formatting)</label>
+        <textarea class="form-control" name="bio" rows="4">{{ user['bio'] }}</textarea>
+      </div>
+      <button class="btn-grad" type="submit">Save Changes</button>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h3><i class="bi bi-eye-fill text-primary"></i> Bio Preview</h3>
+    <!-- Stored XSS sink: bio rendered unescaped -->
+    <div style="padding:12px;border-radius:11px;background:#f7f8ff">{{ user['bio']|safe }}</div>
+    <hr>
+    <table class="tbl">
+      <tr><td class="text-muted">Email</td><td>{{ user['email'] }}</td></tr>
+      <tr><td class="text-muted">Role</td><td><span class="badge-role role-{{ user['role'] }}">{{ user['role']|upper }}</span></td></tr>
+      <tr><td class="text-muted">Salary</td><td>${{ '{:,}'.format(user['salary']) if user['salary'] else '—' }}</td></tr>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

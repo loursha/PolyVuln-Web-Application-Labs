@@ -1,0 +1,11 @@
+<%- include('partials/header') %>
+<div class="container py-5">
+  <div class="alert alert-danger"><strong><%= err.name %>:</strong> <%= err.message %></div>
+  <h1 class="h3 mb-3">Unhandled exception in coupon service</h1>
+  <div class="row g-4">
+    <div class="col-lg-7"><h2 class="h5">Stack trace</h2><pre class="console"><%= err.stack %></pre></div>
+    <div class="col-lg-5"><h2 class="h5">Request context</h2><pre class="console"><%= JSON.stringify(context, null, 2) %></pre></div>
+  </div>
+  <a href="/cart" class="btn btn-outline-primary mt-3">Back to basket</a>
+</div>
+<%- include('partials/footer') %>

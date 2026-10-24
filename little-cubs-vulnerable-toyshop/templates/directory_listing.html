@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Index of /{{ dir_name }}/</title>
+<style>
+  body { font-family: 'Courier New', monospace; background:#fff; color:#222; padding: 30px; }
+  h1 { font-size: 1.3rem; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+  ul { list-style: none; padding: 0; }
+  li { padding: 4px 0; }
+  a { color: #0645AD; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<h1>Index of /{{ dir_name }}/</h1>
+<ul>
+  <li>📁 <a href="../">../</a></li>
+  {% for f in files %}
+  <li>📄 <a href="{{ url_for('serve_upload', filename=f) }}">{{ f }}</a></li>
+  {% endfor %}
+</ul>
+<p style="color:#888; font-size:.8rem; margin-top:30px;">Apache-style autoindex simulation -- Little Cubs Toy Co. file server</p>
+</body>
+</html>

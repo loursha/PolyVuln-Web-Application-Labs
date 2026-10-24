@@ -1,0 +1,24 @@
+{
+  "name": "petal-and-stem",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Petal & Stem - an intentionally vulnerable flower shop for security training. DO NOT DEPLOY PUBLICLY.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "cookie-parser": "1.4.7",
+    "dotenv": "16.4.5",
+    "ejs": "3.1.10",
+    "express": "4.21.2",
+    "express-mysql-session": "3.0.3",
+    "express-rate-limit": "7.4.1",
+    "express-session": "1.18.1",
+    "helmet": "7.2.0",
+    "lodash": "4.17.4",
+    "mysql2": "3.11.5",
+    "serve-index": "1.9.1"
+  }
+}

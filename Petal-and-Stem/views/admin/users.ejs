@@ -1,0 +1,17 @@
+<%- include('../partials/bo-top') %>
+<h1 class="h2 mb-4">Customers &amp; staff</h1>
+<div class="panel p-0"><div class="table-responsive"><table class="table align-middle mb-0">
+  <thead><tr><th class="ps-3">User</th><th>Email</th><th>Role</th><th>Petal Club</th><th>Status</th><th class="pe-3 text-end">Actions</th></tr></thead>
+  <tbody><% users.forEach(u => { %><tr>
+    <td class="ps-3"><strong><%= u.full_name %></strong><br><small class="text-muted">@<%= u.username %></small></td>
+    <td><%= u.email %></td>
+    <td><form method="post" action="/admin/users/<%= u.id %>" class="d-flex gap-1"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><select class="form-select form-select-sm" name="role" aria-label="Role" onchange="this.form.submit()" <%= u.id === user.id ? 'disabled' : '' %>><% ['customer','staff','admin'].forEach(r => { %><option <%= r === u.role ? 'selected' : '' %>><%= r %></option><% }) %></select></form></td>
+    <td><%= u.is_vip ? 'Member' : '—' %></td>
+    <td><span class="status <%= u.active ? 'status-delivered' : 'status-cancelled' %>"><%= u.active ? 'Active' : 'Closed' %></span></td>
+    <td class="pe-3 text-end"><% if (u.id !== user.id) { %>
+      <form method="post" action="/admin/users/<%= u.id %>" class="d-inline"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="action" value="toggle-vip"><button class="btn btn-sm btn-outline-primary"><%= u.is_vip ? 'Remove club' : 'Add to club' %></button></form>
+      <form method="post" action="/admin/users/<%= u.id %>" class="d-inline"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="action" value="toggle-active"><button class="btn btn-sm <%= u.active ? 'btn-outline-danger' : 'btn-primary' %>"><%= u.active ? 'Close' : 'Reactivate' %></button></form>
+    <% } %></td>
+  </tr><% }) %></tbody>
+</table></div></div>
+<%- include('../partials/bo-bottom') %>

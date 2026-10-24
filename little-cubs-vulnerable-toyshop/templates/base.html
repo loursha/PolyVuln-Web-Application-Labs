@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Little Cubs Toy Co. -- Soft & Cuddly Toys{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<!--
+  DEV NOTE (remove before real launch -- ticket CUBS-942):
+  Admin panel lives at /admin. Master override password for emergency
+  access is stored in the INTERNAL_ADMIN_BACKDOOR env var, currently
+  "littlecubs-master-override". Don't commit this comment to the public repo!
+  -- Priya, backend
+-->
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="{{ url_for('home') }}" class="brand"><span class="brand-icon">🧸</span> Little Cubs Toy Co.</a>
+    <form class="nav-search" action="{{ url_for('search') }}" method="get">
+      <input type="text" name="q" placeholder="Search soft toys...">
+      <button type="submit">🔍</button>
+    </form>
+    <div class="nav-links">
+      <a href="{{ url_for('shop') }}">Shop</a>
+      {% if current_user %}
+        <a href="{{ url_for('account') }}">My Account</a>
+        {% if is_admin %}<a href="{{ url_for('admin_dashboard') }}">Admin</a>{% endif %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('register') }}">Sign Up</a>
+      {% endif %}
+      <a href="{{ url_for('view_cart') }}" class="nav-cart">🛒 Cart
+        {% if cart_count %}<span class="cart-badge">{{ cart_count }}</span>{% endif %}
+      </a>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-2">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message | safe }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+
+{% block content %}{% endblock %}
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>Little Cubs Toy Co.</h4>
+        <p style="font-size:.88rem; color:#C9D6E5; max-width:280px;">Soft, safe, huggable plush toys made for little hands and big imaginations, since day one.</p>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <a href="{{ url_for('shop') }}">All Toys</a>
+        <a href="{{ url_for('shop') }}?category=1">Cuddly Friends</a>
+        <a href="{{ url_for('shop') }}?category=2">Baby Safe</a>
+        <a href="{{ url_for('shop') }}?category=5">New Arrivals</a>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <a href="{{ url_for('account') }}">My Account</a>
+        <a href="{{ url_for('forgot_password') }}">Forgot Password</a>
+        <a href="{{ url_for('view_cart') }}">Cart</a>
+      </div>
+      <div>
+        <h4>Stay in the loop</h4>
+        <form class="newsletter-box" action="{{ url_for('newsletter_subscribe') }}" method="post">
+          <input type="email" name="email" placeholder="you@example.com" required>
+          <button type="submit" class="btn btn-primary">Join</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 Little Cubs Toy Co. &mdash; Training lab application. Not a real store.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Order Confirmed -- Little Cubs Toy Co.{% endblock %}
+{% block content %}
+<section class="section text-center">
+  <div class="container">
+    <div style="font-size:4rem;">🎉</div>
+    <h1>Thank You for Your Order!</h1>
+    <p class="section-subtitle">Order #{{ order.id }} has been placed and is {{ order.status }}.</p>
+
+    <div class="form-card" style="text-align:left;">
+      <h3>Order Details</h3>
+      {% for item in order_items %}
+      <div style="display:flex; align-items:center; gap:14px; padding:10px 0; border-bottom:2px dashed var(--cream-dark);">
+        <img src="{{ url_for('static', filename='images/products/' + item.image) }}" class="cart-item-thumb" alt="">
+        <div style="flex:1;">{{ item.name }} &times; {{ item.quantity }}</div>
+        <div>${{ "%.2f"|format(item.price_each * item.quantity) }}</div>
+      </div>
+      {% endfor %}
+      <div class="summary-row summary-total mt-1"><span>Total</span><span>${{ "%.2f"|format(order.total) }}</span></div>
+      <p class="mt-1" style="font-size:.85rem; color:var(--denim-light);">Shipping to: {{ order.shipping_address }}</p>
+    </div>
+
+    <a href="{{ url_for('shop') }}" class="btn btn-primary mt-2">Continue Shopping</a>
+  </div>
+</section>
+{% endblock %}

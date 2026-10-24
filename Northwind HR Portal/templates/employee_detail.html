@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% set active='employees' %}
+{% block title %}{{ emp['full_name'] }}{% endblock %}
+{% block heading %}Employee Profile{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('employees') }}" style="font-size:13px;color:var(--brand);font-weight:600"><i class="bi bi-arrow-left"></i> Back to directory</a>
+
+<div class="grid-2" style="margin-top:16px">
+  <div class="panel">
+    <div class="d-flex align-items-center gap-3 mb-4">
+      <div class="mini-avatar" style="width:64px;height:64px;font-size:26px;border-radius:16px">{{ emp['full_name'][0] }}</div>
+      <div>
+        <h3 style="margin:0;font-size:22px">{{ emp['full_name'] }}</h3>
+        <div class="text-muted">{{ emp['title'] }} · {{ emp['department'] }}</div>
+        <span class="badge-role role-{{ emp['role'] }} mt-1 d-inline-block">{{ emp['role']|upper }}</span>
+      </div>
+    </div>
+    <h3><i class="bi bi-info-circle-fill text-primary"></i> About</h3>
+    <!-- Stored XSS sink: bio rendered unescaped -->
+    <p>{{ emp['bio']|safe }}</p>
+  </div>
+
+  <div class="panel">
+    <h3><i class="bi bi-card-list text-primary"></i> Details</h3>
+    <table class="tbl">
+      <tr><td class="text-muted">Username</td><td>{{ emp['username'] }}</td></tr>
+      <tr><td class="text-muted">Email</td><td>{{ emp['email'] }}</td></tr>
+      <tr><td class="text-muted">Phone</td><td>{{ emp['phone'] }}</td></tr>
+      <tr><td class="text-muted">Department</td><td>{{ emp['department'] }}</td></tr>
+      <tr><td class="text-muted">Salary</td><td>${{ '{:,}'.format(emp['salary']) if emp['salary'] else '—' }}</td></tr>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

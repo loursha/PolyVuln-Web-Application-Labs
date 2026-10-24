@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% set active='admin' %}
+{% block title %}User Management{% endblock %}
+{% block heading %}User Management{% endblock %}
+{% block content %}
+
+<div class="panel" style="margin-bottom:22px">
+  <h3><i class="bi bi-person-plus-fill text-primary"></i> Add New User</h3>
+  <form method="post" action="{{ url_for('admin_add_user') }}" class="row g-3">
+    <div class="col-md-3"><label>Username</label><input class="form-control" name="username"></div>
+    <div class="col-md-3"><label>Full Name</label><input class="form-control" name="full_name"></div>
+    <div class="col-md-3"><label>Email</label><input class="form-control" name="email"></div>
+    <div class="col-md-3"><label>Password</label><input class="form-control" name="password"></div>
+    <div class="col-md-3"><label>Department</label><input class="form-control" name="department"></div>
+    <div class="col-md-3"><label>Title</label><input class="form-control" name="title"></div>
+    <div class="col-md-3"><label>Salary</label><input class="form-control" name="salary" type="number"></div>
+    <div class="col-md-3"><label>Role</label>
+      <select class="form-select" name="role"><option>employee</option><option>hr</option><option>admin</option></select>
+    </div>
+    <div class="col-12"><button class="btn-grad" type="submit">Create User</button></div>
+  </form>
+</div>
+
+<div class="panel">
+  <h3><i class="bi bi-people-fill text-primary"></i> All Users</h3>
+  <table class="tbl">
+    <thead><tr><th>ID</th><th>User</th><th>Email</th><th>Dept</th><th>Role</th><th>Actions</th></tr></thead>
+    <tbody>
+    {% for u in users %}
+      <tr>
+        <td>{{ u['id'] }}</td>
+        <td><span class="avatar-sm">{{ u['full_name'][0] }}</span>{{ u['full_name'] }}<br><small class="text-muted">{{ u['username'] }}</small></td>
+        <td>{{ u['email'] }}</td>
+        <td>{{ u['department'] }}</td>
+        <td>
+          <form method="post" action="{{ url_for('admin_set_role', uid=u['id']) }}" class="d-flex gap-1">
+            <select class="form-select form-select-sm" name="role" style="width:auto">
+              <option {% if u['role']=='employee' %}selected{% endif %}>employee</option>
+              <option {% if u['role']=='hr' %}selected{% endif %}>hr</option>
+              <option {% if u['role']=='admin' %}selected{% endif %}>admin</option>
+            </select>
+            <button class="btn btn-sm btn-outline-primary" type="submit">Set</button>
+          </form>
+        </td>
+        <td>
+          <!-- CSRF: delete via GET -->
+          <a href="{{ url_for('admin_delete_user', uid=u['id']) }}" class="btn btn-sm btn-outline-danger"
+             onclick="return confirm('Delete this user?')"><i class="bi bi-trash"></i></a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

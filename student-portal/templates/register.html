@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card auth-card">
+  <div class="brand">
+    <img src="{{ url_for('static', filename='img/logo.svg') }}" width="38" height="38" alt="logo">
+    <span>EduCore</span>
+  </div>
+  <h5 class="text-center mb-1">Student Enrollment</h5>
+  <p class="text-center hint mb-4">Create your student account</p>
+  {% if msg %}<div class="alert alert-warning py-2">{{ msg }}</div>{% endif %}
+  <form method="post">
+    <div class="mb-3">
+      <label class="form-label">Full name</label>
+      <input name="full_name" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Username</label>
+      <input name="username" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Password</label>
+      <input name="password" type="password" class="form-control" required>
+    </div>
+    <!-- role is fixed to student in the UI, but the backend trusts the submitted value -->
+    <input type="hidden" name="role" value="student">
+    <button class="btn btn-brand w-100 py-2">Enroll now</button>
+  </form>
+  <p class="text-center mt-3 mb-0">
+    <a href="{{ url_for('login') }}" class="hint text-decoration-none">Already enrolled? Sign in</a>
+  </p>
+</div>
+{% endblock %}

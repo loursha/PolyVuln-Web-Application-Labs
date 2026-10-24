@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block auth %}
+<div class="auth-wrap">
+  <div class="auth-hero">
+    <div class="logo">
+      <div class="m"><i class="bi bi-shield-lock-fill"></i></div>
+      <div><div style="font-weight:800;font-size:18px">Northwind</div>
+      <div style="font-size:11px;letter-spacing:.14em;color:#a5b4fc">HR PORTAL</div></div>
+    </div>
+    <h1>Account<br>recovery.</h1>
+    <p>Answer your security question to reset your password and regain access.</p>
+  </div>
+  <div class="auth-form-side">
+    <div class="auth-card">
+      <h2>Reset password</h2>
+      <p class="sub">Verify your identity to continue</p>
+      {% if msg %}
+      <div class="alert-soft alert-info-soft">{{ msg }}</div>
+      {% endif %}
+      <form method="post">
+        <div class="mb-3"><label>Username</label><input class="form-control" name="username"></div>
+        <div class="mb-3"><label>Security answer</label><input class="form-control" name="answer" placeholder="Your answer"></div>
+        <div class="mb-3"><label>New password</label><input class="form-control" name="newpass"></div>
+        <button class="btn-grad w-100" type="submit">Reset Password</button>
+      </form>
+      <div class="text-center mt-3">
+        <a href="{{ url_for('login') }}" style="font-size:13px;color:var(--brand);font-weight:600"><i class="bi bi-arrow-left"></i> Back to login</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

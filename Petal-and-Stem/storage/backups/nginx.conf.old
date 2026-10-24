@@ -1,0 +1,14 @@
+# old reverse proxy config (pre-docker)
+server {
+    listen 80;
+    server_name shop.petalstem.local;
+
+    location /internal/ {
+        deny all;            # supplier sync is only called by the app itself on 127.0.0.1:3000
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_set_header Host $host;
+    }
+}

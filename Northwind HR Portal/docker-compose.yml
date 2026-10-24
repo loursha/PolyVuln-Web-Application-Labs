@@ -1,0 +1,13 @@
+services:
+  hr-portal:
+    build: .
+    container_name: northwind-hr-portal
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_DEBUG=1
+      - SECRET_KEY=hr_super_secret_key_2024_do_not_change
+    volumes:
+      - ./static/uploads:/app/static/uploads
+      - ./logs:/app/logs
+    restart: unless-stopped

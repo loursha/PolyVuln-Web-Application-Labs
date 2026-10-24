@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% set active='documents' %}
+{% block title %}Documents{% endblock %}
+{% block heading %}Document Center{% endblock %}
+{% block content %}
+
+<div class="grid-2">
+  <div class="panel">
+    <h3><i class="bi bi-folder-fill text-primary"></i> Uploaded Documents</h3>
+    <table class="tbl">
+      <thead><tr><th>File</th><th>Uploaded</th><th></th></tr></thead>
+      <tbody>
+      {% for d in docs %}
+        <tr>
+          <td><i class="bi bi-file-earmark-text"></i> {{ d['original_name'] }}</td>
+          <td class="text-muted">{{ d['uploaded_at'] }}</td>
+          <td><a class="btn btn-sm btn-outline-primary" href="{{ url_for('download') }}?file={{ d['filename'] }}"><i class="bi bi-download"></i></a></td>
+        </tr>
+      {% else %}
+        <tr><td colspan="3" class="text-center text-muted py-3">No documents yet.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+    <hr>
+    <h3 style="font-size:14px"><i class="bi bi-hdd text-muted"></i> Storage Listing</h3>
+    <div style="font-family:monospace;font-size:12.5px;color:#4b5563">
+      {% for f in listing %}<div>📄 {{ f }}</div>{% endfor %}
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3><i class="bi bi-cloud-upload-fill text-primary"></i> Upload Document</h3>
+    <form method="post" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label>Select file</label>
+        <input class="form-control" type="file" name="file">
+      </div>
+      <button class="btn-grad w-100" type="submit">Upload</button>
+    </form>
+    <p class="text-muted mt-3" style="font-size:12.5px">Any file type accepted for maximum compatibility.</p>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Little Cubs Toy Co. -- Soft & Cuddly Toys{% endblock %}
+{% block content %}
+
+<div class="hero">
+  <div class="container">
+    <h1>Soft Friends for Little Hearts</h1>
+    <p>Safe, huggable, hand-checked plush toys made for snuggling from the very first day.</p>
+    <a href="{{ url_for('shop') }}" class="btn btn-primary">Shop All Toys</a>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Shop by Category</h2>
+    <p class="section-subtitle">Find the perfect cuddly companion</p>
+    <div class="chip-row">
+      {% for cat in categories %}
+        <a href="{{ url_for('shop') }}?category={{ cat.id }}" class="chip">{{ cat.name }}</a>
+      {% endfor %}
+    </div>
+
+    <h2 class="section-title">Little Cubs Favorites</h2>
+    <p class="section-subtitle">Our best-loved, most-hugged plush friends</p>
+    <div class="product-grid">
+      {% for p in featured %}
+      <div class="product-card">
+        <a href="{{ url_for('product_detail', id=p.id) }}">
+          <img src="{{ url_for('static', filename='images/products/' + p.image) }}" alt="{{ p.name }}">
+        </a>
+        <div class="product-card-body">
+          <span class="badge">Favorite</span>
+          <h3><a href="{{ url_for('product_detail', id=p.id) }}">{{ p.name }}</a></h3>
+          <div class="product-scent">{{ p.material }}</div>
+          <div class="product-price">${{ "%.2f"|format(p.price) }}</div>
+          <form action="{{ url_for('add_to_cart', product_id=p.id) }}" method="post" style="margin-top:auto;">
+            <input type="hidden" name="qty" value="1">
+            <button type="submit" class="btn btn-primary btn-block">Add to Cart</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--cream-dark); padding:70px 0;">
+  <div class="container text-center">
+    <h2 class="section-title">Why Little Cubs?</h2>
+    <div class="dashboard-grid mt-2">
+      <div class="stat-card"><div style="font-size:2rem;">🧵</div><h3>Baby-Safe Stitching</h3><p style="color:var(--denim-light);font-size:.9rem;">Reinforced seams, no small parts, hand-checked.</p></div>
+      <div class="stat-card"><div style="font-size:2rem;">🌿</div><h3>Hypoallergenic Fill</h3><p style="color:var(--denim-light);font-size:.9rem;">Soft, breathable, gentle on sensitive skin.</p></div>
+      <div class="stat-card"><div style="font-size:2rem;">🧺</div><h3>Machine Washable</h3><p style="color:var(--denim-light);font-size:.9rem;">Toss it in the wash, ready to snuggle again.</p></div>
+      <div class="stat-card"><div style="font-size:2rem;">🎁</div><h3>Gift Ready</h3><p style="color:var(--denim-light);font-size:.9rem;">Beautifully packaged for baby showers & birthdays.</p></div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Your Cart -- Little Cubs Toy Co.{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <h1 class="section-title" style="text-align:left;">Your Cart</h1>
+
+    {% if items %}
+    <table class="cart-table">
+      <thead>
+        <tr><th></th><th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td><img class="cart-item-thumb" src="{{ url_for('static', filename='images/products/' + item.product.image) }}" alt=""></td>
+          <td>{{ item.product.name }}</td>
+          <td>${{ "%.2f"|format(item.product.price) }}</td>
+          <td>{{ item.qty }}</td>
+          <td>${{ "%.2f"|format(item.subtotal) }}</td>
+          <td>
+            <form action="{{ url_for('remove_from_cart', product_id=item.product.id) }}" method="post">
+              <button type="submit" class="btn btn-sm btn-outline">Remove</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin: 10px 0 30px;">
+      <form action="{{ url_for('save_cart_for_later') }}" method="post">
+        <button type="submit" class="btn btn-outline btn-sm">💾 Save Cart for Later</button>
+      </form>
+      <a href="{{ url_for('restore_cart') }}" class="btn btn-outline btn-sm">↩️ Restore Saved Cart</a>
+    </div>
+
+    <div class="cart-summary">
+      <div class="summary-row"><span>Subtotal</span><span>${{ "%.2f"|format(total) }}</span></div>
+      <div class="summary-row"><span>Shipping</span><span>Free</span></div>
+      <div class="summary-row summary-total"><span>Total</span><span>${{ "%.2f"|format(total) }}</span></div>
+      <a href="{{ url_for('checkout') }}" class="btn btn-primary btn-block mt-1">Proceed to Checkout</a>
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+      <div class="icon">🛒</div>
+      <p>Your cart is empty.</p>
+      <a href="{{ url_for('shop') }}" class="btn btn-primary mt-1">Browse Toys</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

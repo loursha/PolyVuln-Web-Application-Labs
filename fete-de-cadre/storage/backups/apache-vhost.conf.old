@@ -1,0 +1,12 @@
+# old vhost from the shared-hosting box (pre-container)
+<VirtualHost *:80>
+    ServerName shop.fetedecadre.local
+    DocumentRoot /var/www/fetedecadre/public
+    <Location /internal/>
+        Require ip 127.0.0.1
+    </Location>
+    <Directory /var/www/fetedecadre/public>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>

@@ -1,0 +1,37 @@
+<%- include('../partials/bo-top') %>
+<h1 class="h2 mb-4">Order queue</h1>
+<div class="row g-3 mb-4">
+  <div class="col-6 col-xl-3"><div class="kpi"><div class="v"><%= counts.received || 0 %></div><div class="l">New orders</div></div></div>
+  <div class="col-6 col-xl-3"><div class="kpi"><div class="v"><%= counts.arranging || 0 %></div><div class="l">On the bench</div></div></div>
+  <div class="col-6 col-xl-3"><div class="kpi"><div class="v"><%= counts.out_for_delivery || 0 %></div><div class="l">Out with drivers</div></div></div>
+  <div class="col-6 col-xl-3"><div class="kpi"><div class="v"><%= counts.delivered || 0 %></div><div class="l">Delivered</div></div></div>
+</div>
+<div class="row g-4">
+  <div class="col-xl-8">
+    <div class="panel p-0"><div class="table-responsive"><table class="table align-middle mb-0">
+      <thead><tr><th class="ps-3">Order</th><th>Recipient</th><th>Deliver on</th><th>Card message</th><th class="pe-3">Status</th></tr></thead>
+      <tbody>
+      <% if (!orders.length) { %><tr><td colspan="5" class="text-center text-muted py-4">The bench is clear. New orders appear here as they come in.</td></tr><% } %>
+      <% orders.forEach(o => { %><tr>
+        <td class="ps-3"><strong><%= o.order_number %></strong><br><small class="text-muted"><%= o.username %></small></td>
+        <td><%= o.recipient_name %><br><small class="text-muted"><%= o.delivery_address %></small></td>
+        <td><%= String(o.delivery_date).slice(0, 10) %></td>
+        <td class="small"><%= o.message_card || '—' %></td>
+        <td class="pe-3"><form method="post" action="/staff/orders/<%= o.id %>/status" class="d-flex gap-1"><input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <select name="status" class="form-select form-select-sm" aria-label="Status"><% STATUSES.forEach(s => { %><option value="<%= s %>" <%= s === o.status ? 'selected' : '' %>><%= s.replace(/_/g, ' ') %></option><% }) %></select>
+          <button class="btn btn-sm btn-primary">Save</button></form></td>
+      </tr><% }) %>
+      </tbody></table></div></div>
+  </div>
+  <div class="col-xl-4">
+    <div class="panel mb-4"><h2 class="h5 mb-3">Low stock</h2>
+      <% if (!lowStock.length) { %><p class="text-muted mb-0">All lines have 10 or more in stock.</p><% } %>
+      <% lowStock.forEach(p => { %><div class="d-flex justify-content-between mb-1"><span><%= p.name %></span><span class="stock-low"><%= p.stock %></span></div><% }) %>
+    </div>
+    <div class="panel"><h2 class="h5 mb-3">Custom requests</h2>
+      <% if (!requests.length) { %><p class="text-muted mb-0">No custom design requests yet.</p><% } %>
+      <% requests.forEach(r => { %><div class="border-bottom pb-2 mb-2"><strong><%= r.full_name %></strong> · <%= r.occasion %> · $<%= r.budget %><br><small class="text-muted"><%= r.palette %><%= r.notes ? ' — ' + r.notes : '' %></small></div><% }) %>
+    </div>
+  </div>
+</div>
+<%- include('../partials/bo-bottom') %>

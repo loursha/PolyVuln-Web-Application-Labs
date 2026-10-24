@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Application Error{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <h1 class="section-title" style="text-align:left; color:var(--danger);">⚠️ Application Error</h1>
+    <div class="form-card" style="max-width:800px; margin:0;">
+      <h3>Error Message</h3>
+      <pre class="code-block">{{ error }}</pre>
+
+      {% if traceback %}
+      <h3 class="mt-2">Full Stack Trace</h3>
+      <pre class="code-block">{{ traceback }}</pre>
+      <p style="font-size:.8rem; color:var(--denim-light);" class="mt-1">
+        (This detailed error output should never be shown to end users in a real application --
+        it discloses file paths, library versions, and internal logic. See VULNERABILITY #25 in README.md.)
+      </p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,3 @@
+<div class="d-flex justify-content-between align-items-end mb-3"><div><h1 class="h2 mb-1">Activity log</h1><p class="text-muted mb-0">The latest 250 events from logs/activity.log, newest first.</p></div><a href="/staff/logs" class="btn btn-outline-primary btn-sm"><i class="bi bi-arrow-clockwise"></i> Refresh</a></div>
+<pre class="console"><?php if (!$lines): ?>No activity recorded yet.<?php endif; ?><?php foreach ($lines as $l): ?><?= e($l) ?>
+<?php endforeach; ?></pre>

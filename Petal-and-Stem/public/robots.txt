@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /account/
+Disallow: /backoffice/
+Disallow: /staff/
+Disallow: /admin/
+Disallow: /backups/
+Disallow: /debug/

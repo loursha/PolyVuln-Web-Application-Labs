@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="page-title">Admin · User Management</h3>
+<div class="card"><div class="card-body">
+  <table class="table align-middle mb-0">
+    <thead><tr><th>ID</th><th>Username</th><th>Full Name</th><th>Role</th></tr></thead>
+    <tbody>
+      {% for u in users %}
+      <tr><td>{{ u['id'] }}</td><td>{{ u['username'] }}</td>
+      <td>{{ u['full_name']|safe }}</td>
+      <td><span class="badge bg-primary text-capitalize">{{ u['role'] }}</span></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div></div>
+{% endblock %}

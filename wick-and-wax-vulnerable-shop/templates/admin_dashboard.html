@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard -- Wick & Wax Co.{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <h1 class="section-title" style="text-align:left;">Admin Dashboard</h1>
+
+    <div class="admin-nav">
+      <a href="{{ url_for('admin_dashboard') }}">Overview</a>
+      <a href="{{ url_for('admin_new_product') }}">+ New Product</a>
+      <a href="{{ url_for('ping_supplier') }}">Supplier Connectivity</a>
+      <a href="{{ url_for('fetch_image_preview') }}">Import Image from URL</a>
+      <a href="{{ url_for('admin_system_info') }}">System Info</a>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="stat-card"><div class="stat-num">{{ stats.total_products }}</div><div class="stat-label">Products</div></div>
+      <div class="stat-card"><div class="stat-num">{{ stats.total_users }}</div><div class="stat-label">Users</div></div>
+      <div class="stat-card"><div class="stat-num">{{ stats.total_orders }}</div><div class="stat-label">Orders</div></div>
+      <div class="stat-card"><div class="stat-num">{{ stats.total_reviews }}</div><div class="stat-label">Reviews</div></div>
+    </div>
+
+    <h3 class="mb-1">Users</h3>
+    <table class="data-table mb-2">
+      <thead><tr><th>ID</th><th>Username</th><th>Email</th><th>Admin?</th><th>Joined</th></tr></thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td>{{ u.id }}</td>
+          <td>{{ u.username }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ 'Yes' if u.is_admin else 'No' }}</td>
+          <td>{{ u.created_at }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h3 class="mb-1">Suppliers</h3>
+    <table class="data-table">
+      <thead><tr><th>Name</th><th>Hostname</th><th>Contact</th></tr></thead>
+      <tbody>
+        {% for s in suppliers %}
+        <tr><td>{{ s.name }}</td><td>{{ s.hostname }}</td><td>{{ s.contact_email }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

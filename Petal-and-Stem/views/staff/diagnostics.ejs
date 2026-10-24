@@ -1,0 +1,17 @@
+<%- include('../partials/bo-top') %>
+<h1 class="h2 mb-1">Delivery hub diagnostics</h1>
+<p class="text-muted mb-4">Check that a delivery hub or driver tablet gateway is reachable from the studio server.</p>
+<div class="row g-4">
+  <div class="col-lg-5">
+    <form method="post" action="/staff/diagnostics" class="panel">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <label class="form-label" for="host">Hub hostname or IP</label>
+      <input class="form-control mb-2" id="host" name="host" value="<%= host %>" list="hubs" required>
+      <datalist id="hubs"><option value="127.0.0.1">Studio server</option><option value="hub-north.petalstem.local"></option><option value="hub-east.petalstem.local"></option></datalist>
+      <% if (error) { %><div class="alert alert-danger py-2 mt-2"><%= error %></div><% } %>
+      <button class="btn btn-primary mt-2"><i class="bi bi-broadcast"></i> Run connectivity check</button>
+    </form>
+  </div>
+  <div class="col-lg-7"><h2 class="h5">Result</h2><pre class="console"><%= output === null ? 'Run a check to see results here.' : output %></pre></div>
+</div>
+<%- include('../partials/bo-bottom') %>

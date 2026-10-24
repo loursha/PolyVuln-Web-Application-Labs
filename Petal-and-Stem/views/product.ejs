@@ -1,0 +1,66 @@
+<%- include('partials/header') %>
+<div class="container py-5">
+  <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="/shop">Shop</a></li><li class="breadcrumb-item"><a href="/shop?category=<%= product.category %>"><%= product.category %></a></li><li class="breadcrumb-item active" aria-current="page"><%= product.name %></li></ol></nav>
+  <div class="row g-5">
+    <div class="col-lg-6"><div class="arch" style="aspect-ratio:4/5"><img src="<%= product.image %>" alt="<%= product.name %>"></div></div>
+    <div class="col-lg-6">
+      <h1 class="mb-2"><%= product.name %></h1>
+      <% if (reviews.length) { %><a href="#reviews" class="text-decoration-none text-muted"><span class="stars"><%= '★'.repeat(Math.round(avg)) %></span> <%= avg.toFixed(1) %> from <%= reviews.length %> review<%= reviews.length === 1 ? '' : 's' %></a><% } %>
+      <p class="fs-2 fw-bold mt-3" style="color:var(--forest)"><%= money(product.price) %></p>
+      <p class="measure"><%= product.description %></p>
+      <% if (product.stock > 0) { %>
+      <form method="post" action="/cart/add" class="d-flex gap-2 align-items-center my-4">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="product_id" value="<%= product.id %>">
+        <input type="hidden" name="slug" value="<%= product.slug %>">
+        <div class="input-group qty" style="width:140px">
+          <button class="btn btn-outline-primary px-3" type="button" data-step="-1" aria-label="Decrease">−</button>
+          <input type="number" class="form-control text-center" name="qty" value="1" min="1" max="20" aria-label="Quantity">
+          <button class="btn btn-outline-primary px-3" type="button" data-step="1" aria-label="Increase">+</button>
+        </div>
+        <button class="btn btn-primary btn-lg flex-grow-1"><i class="bi bi-basket2 me-1"></i> Add to basket</button>
+      </form>
+      <% } else { %><div class="alert alert-danger">Sold out for today. Check back tomorrow morning.</div><% } %>
+      <div class="panel panel-sage">
+        <div class="d-flex gap-3 mb-2"><i class="bi bi-truck fs-4"></i><div><strong>Same-day delivery</strong><br><span class="text-muted">Order by 2pm. Free over $75.</span></div></div>
+        <div class="d-flex gap-3"><i class="bi bi-flower1 fs-4"></i><div><strong>7-day freshness promise</strong><br><span class="text-muted">If they fade early, we'll replace them.</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <section id="reviews" class="mt-5 pt-4">
+    <div class="row g-5">
+      <div class="col-lg-7">
+        <h2 class="mb-4">Customer reviews</h2>
+        <% if (!reviews.length) { %><p class="text-muted">No reviews yet. Bought these flowers? Be the first to tell others how they lasted.</p><% } %>
+        <% reviews.forEach(r => { %>
+          <div class="border-bottom pb-3 mb-3">
+            <div class="d-flex justify-content-between"><strong><%= r.full_name %></strong><small class="text-muted"><%= String(r.created_at).slice(0, 10) %></small></div>
+            <div class="stars small mb-1"><%= '★'.repeat(r.rating) %><span class="text-muted"><%= '★'.repeat(5 - r.rating) %></span></div>
+            <div class="review-body"><%- r.body %></div>
+          </div>
+        <% }) %>
+      </div>
+      <div class="col-lg-5">
+        <div class="panel">
+          <h3 class="mb-3">Write a review</h3>
+          <% if (user) { %>
+          <form method="post" action="/product/<%= product.slug %>/review">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <label class="form-label" for="rating">Rating</label>
+            <select class="form-select mb-3" id="rating" name="rating"><option value="5">5 – Loved them</option><option value="4">4 – Very good</option><option value="3">3 – Fine</option><option value="2">2 – Disappointing</option><option value="1">1 – Poor</option></select>
+            <label class="form-label" for="body">Your review</label>
+            <textarea class="form-control mb-3" id="body" name="body" rows="4" maxlength="1000" placeholder="How did they look on arrival? How long did they last?" required></textarea>
+            <button class="btn btn-primary">Publish review</button>
+          </form>
+          <% } else { %><p class="text-muted mb-3">Sign in to share how your flowers arrived and how long they lasted.</p><a class="btn btn-outline-primary" href="/login?next=/product/<%= product.slug %>">Sign in to review</a><% } %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <% if (related.length) { %>
+  <section class="mt-5"><h2 class="mb-4">You might also like</h2><div class="row g-4"><% related.forEach(p => { %><div class="col-6 col-md-4"><%- include('partials/product-card', { p }) %></div><% }) %></div></section>
+  <% } %>
+</div>
+<%- include('partials/footer') %>

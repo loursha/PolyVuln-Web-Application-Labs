@@ -1,0 +1,13 @@
+==========================================
+ Little Cubs Toy Co. -- Order Invoice
+==========================================
+Order #: 1
+Customer: mia
+Items:
+  1x Classic Teddy Bear   $19.99
+  1x Baby Dino            $21.99
+------------------------------------------
+Total: $41.98
+Shipping: 45 Oakwood Lane, Austin, TX 78701
+==========================================
+Thank you for shopping with us!

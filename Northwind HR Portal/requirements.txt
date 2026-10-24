@@ -1,0 +1,10 @@
+# NOTE: Pinned to OLD versions on purpose (CWE-1035 / CWE-1395)
+# Known-vulnerable components for supply-chain training.
+Flask==2.0.1
+Werkzeug==2.0.1
+Jinja2==3.0.1
+requests==2.25.1
+PyYAML==5.3.1
+python-dotenv==0.19.0
+itsdangerous==2.0.1
+MarkupSafe==2.0.1

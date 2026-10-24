@@ -1,0 +1,13 @@
+==========================================
+ Wick & Wax Co. -- Order Invoice
+==========================================
+Order #: 1
+Customer: alice
+Items:
+  1x Lavender Dream       $24.00
+  1x Fresh Linen          $20.00
+------------------------------------------
+Total: $46.00
+Shipping: 12 Maple Street, Portland, OR 97201
+==========================================
+Thank you for shopping with us!

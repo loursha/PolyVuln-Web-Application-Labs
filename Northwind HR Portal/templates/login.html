@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block auth %}
+<div class="auth-wrap">
+  <div class="auth-hero">
+    <div class="logo">
+      <div class="m"><i class="bi bi-buildings-fill"></i></div>
+      <div><div style="font-weight:800;font-size:18px">Northwind</div>
+      <div style="font-size:11px;letter-spacing:.14em;color:#a5b4fc">HR PORTAL</div></div>
+    </div>
+    <h1>People operations,<br>beautifully simple.</h1>
+    <p>Manage your workforce, leave, payroll and documents from one modern, unified HR workspace.</p>
+    <div class="auth-feats">
+      <div><i class="bi bi-check-circle-fill"></i> Employee directory &amp; profiles</div>
+      <div><i class="bi bi-check-circle-fill"></i> Leave requests &amp; approvals</div>
+      <div><i class="bi bi-check-circle-fill"></i> HR console &amp; payroll insights</div>
+      <div><i class="bi bi-check-circle-fill"></i> Role-based administration</div>
+    </div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-card">
+      <h2>Welcome back</h2>
+      <p class="sub">Sign in to your HR account</p>
+
+      {% if error %}
+      <div class="alert-soft alert-danger-soft"><i class="bi bi-exclamation-triangle-fill"></i> {{ error }}</div>
+      {% endif %}
+
+      <form method="post">
+        <div class="mb-3">
+          <label>Username</label>
+          <input class="form-control" name="username" placeholder="e.g. j.doe" autofocus>
+        </div>
+        <div class="mb-3">
+          <label>Password</label>
+          <input class="form-control" type="password" name="password" placeholder="••••••••">
+        </div>
+        <button class="btn-grad w-100" type="submit">Sign In <i class="bi bi-arrow-right"></i></button>
+      </form>
+
+      <div class="text-center mt-3">
+        <a href="{{ url_for('forgot') }}" style="font-size:13px;color:var(--brand);font-weight:600">Forgot password?</a>
+      </div>
+
+      <div class="cred-box">
+        <b>Demo accounts</b><br>
+        <!--Admin: <b>admin / Admin@123</b><br>
+        HR: <b>hr.manager / Hr@2024</b><br>-->
+        Employee: <b>j.doe / Password1</b>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

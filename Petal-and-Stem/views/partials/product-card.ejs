@@ -1,0 +1,8 @@
+<a class="product-card" href="/product/<%= p.slug %>">
+  <div class="arch"><img src="<%= p.image %>" alt="<%= p.name %>" loading="lazy"></div>
+  <h3><%= p.name %></h3>
+  <div class="d-flex justify-content-between align-items-baseline">
+    <span class="cat"><%= p.category %></span><span class="price"><%= money(p.price) %></span>
+  </div>
+  <% if (p.stock < 10) { %><div class="stock-low mt-1">Only <%= p.stock %> left today</div><% } %>
+</a>

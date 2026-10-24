@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% set active='dashboard' %}
+{% block title %}Dashboard{% endblock %}
+{% block heading %}Dashboard{% endblock %}
+{% block content %}
+
+<div class="stat-grid">
+  <div class="stat">
+    <div class="icon i-blue"><i class="bi bi-people-fill"></i></div>
+    <div class="val">{{ stats.employees }}</div>
+    <div class="lbl">Total Employees</div>
+  </div>
+  <div class="stat">
+    <div class="icon i-amber"><i class="bi bi-calendar-event-fill"></i></div>
+    <div class="val">{{ stats.pending_leave }}</div>
+    <div class="lbl">Pending Leave</div>
+  </div>
+  <div class="stat">
+    <div class="icon i-cyan"><i class="bi bi-diagram-3-fill"></i></div>
+    <div class="val">{{ stats.departments }}</div>
+    <div class="lbl">Departments</div>
+  </div>
+  <div class="stat">
+    <div class="icon i-green"><i class="bi bi-megaphone-fill"></i></div>
+    <div class="val">{{ stats.announcements }}</div>
+    <div class="lbl">Announcements</div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="panel">
+    <h3><i class="bi bi-megaphone-fill text-primary"></i> Company Announcements</h3>
+    {% for a in announcements %}
+    <div class="ann">
+      <h5>{{ a['title'] }}</h5>
+      <!-- Stored XSS sink: announcement body rendered unescaped -->
+      <p>{{ a['body']|safe }}</p>
+      <div class="meta"><i class="bi bi-person"></i> {{ a['author'] }} · {{ a['created_at'] }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="panel">
+    <h3><i class="bi bi-bar-chart-fill text-primary"></i> Headcount by Dept</h3>
+    {% set maxv = dept_data.values()|list|max %}
+    {% for dept, count in dept_data.items() %}
+    <div class="dept-row">
+      <div class="top"><span>{{ dept }}</span><span>{{ count }}</span></div>
+      <div class="chart-bar" style="width:{{ (count / maxv * 100)|round }}%"></div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

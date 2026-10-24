@@ -1,0 +1,32 @@
+<%- include('../partials/bo-top') %>
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-4">
+  <div><h1 class="h2 mb-1">Dashboard</h1><p class="text-muted mb-0">Sales for the last 14 days. FLAG{admin_dashboard_reached}</p></div>
+  <form method="post" action="/admin/lab/reset"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn btn-sm btn-outline-primary" title="Clears shared runtime state for the training lab"><i class="bi bi-arrow-counterclockwise"></i> Reset lab state</button></form>
+</div>
+<div class="row g-3 mb-4">
+  <div class="col-6 col-xl-3"><div class="kpi"><div class="v"><%= money(kpi.revenue) %></div><div class="l">Revenue</div></div></div>
+  <div class="col-6 col-xl-3"><div class="kpi"><div class="v"><%= kpi.orders %></div><div class="l">Orders</div></div></div>
+  <div class="col-6 col-xl-3"><div class="kpi"><div class="v"><%= money(kpi.aov) %></div><div class="l">Average order</div></div></div>
+  <div class="col-6 col-xl-3"><div class="kpi"><div class="v"><%= customers %></div><div class="l">Customers</div></div></div>
+</div>
+<div class="row g-4 mb-4">
+  <div class="col-xl-8"><div class="panel h-100"><h2 class="h5">Daily revenue</h2><div style="height:280px"><canvas id="revChart" aria-label="Daily revenue chart" role="img"></canvas></div></div></div>
+  <div class="col-xl-4"><div class="panel h-100"><h2 class="h5">Revenue by category</h2><div style="height:280px"><canvas id="catChart" aria-label="Revenue by category chart" role="img"></canvas></div></div></div>
+</div>
+<div class="row g-4">
+  <div class="col-xl-8"><div class="panel p-0"><div class="p-3 pb-0"><h2 class="h5">Recent orders</h2></div><div class="table-responsive"><table class="table align-middle mb-0">
+    <thead><tr><th class="ps-3">Order</th><th>Customer</th><th>Status</th><th class="text-end pe-3">Total</th></tr></thead>
+    <tbody><% recent.forEach(o => { %><tr><td class="ps-3"><%= o.order_number %></td><td><%= o.username %></td><td><span class="status status-<%= o.status %>"><%= o.status.replace(/_/g, ' ') %></span></td><td class="text-end pe-3"><%= money(o.total) %></td></tr><% }) %></tbody>
+  </table></div></div></div>
+  <div class="col-xl-4"><div class="panel"><h2 class="h5 mb-3">Best sellers</h2><% top.forEach(t => { %><div class="d-flex justify-content-between mb-2"><span><%= t.product_name %></span><strong><%= t.units %></strong></div><% }) %></div></div>
+</div>
+<script src="/vendor/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var days = <%- JSON.stringify(days).replace(/</g, '\\u003c') %>, cats = <%- JSON.stringify(byCat).replace(/</g, '\\u003c') %>;
+  Chart.defaults.font.family = 'Karla, system-ui, sans-serif'; Chart.defaults.color = '#5e6b63';
+  new Chart(document.getElementById('revChart'), { type: 'bar', data: { labels: days.map(function (d) { return d.d.slice(5); }), datasets: [{ label: 'Revenue ($)', data: days.map(function (d) { return d.revenue; }), backgroundColor: '#1f3b2d', borderRadius: 6 }] }, options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#eef2ed' } }, x: { grid: { display: false } } } } });
+  new Chart(document.getElementById('catChart'), { type: 'doughnut', data: { labels: cats.map(function (c) { return c.category; }), datasets: [{ data: cats.map(function (c) { return Number(c.revenue); }), backgroundColor: ['#1f3b2d', '#c2416b', '#8fae8a', '#e8b4c4', '#d9a400'], borderWidth: 0 }] }, options: { maintainAspectRatio: false, cutout: '62%', plugins: { legend: { position: 'bottom' } } } });
+});
+</script>
+<%- include('../partials/bo-bottom') %>

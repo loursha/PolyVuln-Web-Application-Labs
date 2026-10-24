@@ -1,0 +1,27 @@
+# Isolation: DB only reachable from the app; app egress limited to DB + DNS.
+# Blocks SSRF from reaching cloud metadata or the wider cluster (needs a CNI that enforces NetworkPolicy).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: db-from-app-only
+  namespace: petalstem-lab
+spec:
+  podSelector: { matchLabels: { app: petalstem-db } }
+  policyTypes: [Ingress]
+  ingress:
+    - from: [{ podSelector: { matchLabels: { app: petalstem-app } } }]
+      ports: [{ port: 3306 }]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: app-egress-restricted
+  namespace: petalstem-lab
+spec:
+  podSelector: { matchLabels: { app: petalstem-app } }
+  policyTypes: [Egress]
+  egress:
+    - to: [{ podSelector: { matchLabels: { app: petalstem-db } } }]
+      ports: [{ port: 3306 }]
+    - to: [{ namespaceSelector: {} }]
+      ports: [{ port: 53, protocol: UDP }, { port: 53, protocol: TCP }]

@@ -1,0 +1,48 @@
+<%- include('partials/header') %>
+<div class="container py-5">
+  <h1 class="mb-4">Your basket</h1>
+  <% if (!items.length) { %>
+    <div class="panel panel-sage text-center py-5"><h3>Your basket is empty</h3><p class="text-muted">Add a bouquet to get started. Order by 2pm for same-day delivery.</p><a class="btn btn-primary" href="/shop">Shop flowers</a></div>
+  <% } else { %>
+  <div class="row g-5">
+    <div class="col-lg-8">
+      <% items.forEach(i => { %>
+      <div class="d-flex gap-3 align-items-center border-bottom py-3">
+        <div class="arch flex-shrink-0" style="width:84px;height:104px"><img src="<%= i.image %>" alt=""></div>
+        <div class="flex-grow-1"><h3 class="h5 mb-1" style="font-family:var(--serif)"><%= i.name %></h3><span class="text-muted"><%= money(i.price) %> each</span></div>
+        <form method="post" action="/cart/update" class="d-flex align-items-center gap-2">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="product_id" value="<%= i.id %>">
+          <label class="visually-hidden" for="q<%= i.id %>">Quantity</label>
+          <input id="q<%= i.id %>" class="form-control js-autosubmit text-center" style="width:76px" type="number" name="qty" min="0" max="50" value="<%= i.qty %>">
+        </form>
+        <strong style="width:90px" class="text-end"><%= money(i.price * i.qty) %></strong>
+        <form method="post" action="/cart/remove"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="product_id" value="<%= i.id %>"><button class="btn btn-link text-danger" aria-label="Remove <%= i.name %>"><i class="bi bi-x-lg"></i></button></form>
+      </div>
+      <% }) %>
+      <a href="/shop" class="d-inline-block mt-3"><i class="bi bi-arrow-left"></i> Keep shopping</a>
+    </div>
+    <div class="col-lg-4">
+      <div class="panel">
+        <h3 class="mb-3">Summary</h3>
+        <div class="d-flex justify-content-between mb-2"><span>Subtotal</span><span><%= money(t.subtotal) %></span></div>
+        <% if (t.discount) { %><div class="d-flex justify-content-between mb-2" style="color:var(--peony-dark)"><span><%= isVip && (!coupon || coupon.pct < 15) ? 'Petal Club' : coupon.code %> (<%= t.pct %>% off)</span><span>−<%= money(t.discount) %></span></div><% } %>
+        <div class="d-flex justify-content-between mb-2"><span>Delivery</span><span><%= t.delivery ? money(t.delivery) : 'Free' %></span></div>
+        <% if (t.delivery) { %><small class="text-muted d-block mb-2">Spend <%= money(freeOver - (t.subtotal - t.discount)) %> more for free delivery.</small><% } %>
+        <hr>
+        <div class="d-flex justify-content-between fs-5 fw-bold mb-3"><span>Total</span><span><%= money(t.total) %></span></div>
+        <% if (coupon) { %>
+          <form method="post" action="/cart/coupon/remove" class="mb-3 d-flex justify-content-between align-items-center"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><span class="status status-delivered"><i class="bi bi-tag"></i> <%= coupon.code %></span><button class="btn btn-link btn-sm">Remove code</button></form>
+        <% } else { %>
+          <form method="post" action="/cart/coupon" class="input-group mb-3">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <input class="form-control" name="code" placeholder="Promo code" aria-label="Promo code">
+            <button class="btn btn-outline-primary">Apply</button>
+          </form>
+        <% } %>
+        <a href="/checkout" class="btn btn-primary w-100 btn-lg">Go to checkout</a>
+      </div>
+    </div>
+  </div>
+  <% } %>
+</div>
+<%- include('partials/footer') %>

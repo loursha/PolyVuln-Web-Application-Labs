@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="page-title">File Manager</h3>
+{% if msg %}<div class="alert alert-success">{{ msg }}</div>{% endif %}
+<div class="row g-3">
+  <div class="col-md-6"><div class="card"><div class="card-body">
+    <h6>Upload document</h6>
+    <form method="post" enctype="multipart/form-data">
+      <input type="file" name="file" class="form-control mb-2" required>
+      <button class="btn btn-brand">Upload</button>
+    </form>
+  </div></div></div>
+  <div class="col-md-6"><div class="card"><div class="card-body">
+    <h6>Browse files</h6>
+    <a href="{{ url_for('files') }}" class="btn btn-outline-primary">View uploaded files</a>
+  </div></div></div>
+</div>
+{% endblock %}

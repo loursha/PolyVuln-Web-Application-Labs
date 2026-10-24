@@ -1,0 +1,66 @@
+version: "3.8"
+
+# ============================================================================
+# The Antiquary & Relic Co. -- isolated training lab
+# Start with: docker compose up -d
+# ============================================================================
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: antiquary-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw_lab_only
+      MYSQL_DATABASE: antiques_shop
+      MYSQL_USER: antiques_app
+      MYSQL_PASSWORD: AntiquesApp2024!
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./backend/config/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    ports:
+      - "3306:3306"
+    networks:
+      - lab-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpw_lab_only"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: antiquary-backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=antiques_app
+      - DB_PASSWORD=AntiquesApp2024!
+      - DB_NAME=antiques_shop
+      - NODE_ENV=development
+    command: sh -c "node seed.js && node server.js"
+    ports:
+      - "4100:4100"
+    networks:
+      - lab-network
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: antiquary-frontend
+    depends_on:
+      - backend
+    ports:
+      - "3100:3100"
+    networks:
+      - lab-network
+    restart: unless-stopped
+
+networks:
+  lab-network:
+    driver: bridge
+    internal: false   # set to true to fully isolate the lab from the internet
+
+volumes:
+  mysql-data:
