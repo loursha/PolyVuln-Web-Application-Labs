@@ -169,8 +169,8 @@ All deployments bind to `127.0.0.1` by default so the labs are not reachable fro
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/<your-org>/polyvuln-labs.git
-cd polyvuln-labs
+git clone https://github.com/loursha/PolyVuln-Web-Application-Labs.git
+cd PolyVuln-Web-Application-Labs
 ```
 
 Then open the lab of your choice and follow the setup instructions in its own README.
