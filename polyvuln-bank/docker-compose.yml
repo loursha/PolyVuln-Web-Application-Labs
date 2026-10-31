@@ -1,0 +1,53 @@
+name: polyvuln-bank
+
+services:
+  web:
+    build: .
+    image: polyvuln/bank-web:4.12.3
+    container_name: pvb-web
+    env_file: .env
+    ports:
+      - "127.0.0.1:8080:80"      # lab-only: bound to loopback
+    depends_on:
+      db:
+        condition: service_healthy
+      core-ledger:
+        condition: service_started
+    networks: [frontend, backend]
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    container_name: pvb-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: polybank
+    volumes:
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+      - pvb-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    networks: [backend]
+    restart: unless-stopped
+
+  core-ledger:
+    image: php:8.2-cli
+    container_name: pvb-core-ledger
+    command: ["php", "-S", "0.0.0.0:8081", "/srv/router.php"]
+    environment:
+      GATEWAY_SIGNING_KEY: ${GATEWAY_SIGNING_KEY}
+    volumes:
+      - ./core-ledger:/srv:ro
+    networks: [backend]
+    restart: unless-stopped
+
+networks:
+  frontend: {}
+  backend:
+    internal: true            # no route to the internet from db / ledger
+
+volumes:
+  pvb-db-data: {}

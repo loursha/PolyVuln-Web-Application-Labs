@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pvb-config
+  namespace: polyvuln-bank
+data:
+  DB_HOST: pvb-db
+  DB_NAME: polybank
+  LEDGER_URL: http://pvb-core-ledger:8081
+  DOC_STORE: /var/www/storage/documents

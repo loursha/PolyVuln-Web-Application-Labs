@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pvb-core-ledger
+  namespace: polyvuln-bank
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: pvb-core-ledger } }
+  template:
+    metadata: { labels: { app: pvb-core-ledger } }
+    spec:
+      containers:
+        - name: ledger
+          image: php:8.2-cli
+          command: ["php", "-S", "0.0.0.0:8081", "/srv/router.php"]
+          env:
+            - name: GATEWAY_SIGNING_KEY
+              valueFrom: { secretKeyRef: { name: pvb-secrets, key: GATEWAY_SIGNING_KEY } }
+          ports: [{ containerPort: 8081 }]
+          volumeMounts: [{ name: srv, mountPath: /srv }]
+      # In a real deploy, bake core-ledger/ into an image; here it is illustrative.
+      volumes: [{ name: srv, emptyDir: {} }]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pvb-core-ledger
+  namespace: polyvuln-bank
+spec:
+  selector: { app: pvb-core-ledger }
+  ports: [{ port: 8081, targetPort: 8081 }]

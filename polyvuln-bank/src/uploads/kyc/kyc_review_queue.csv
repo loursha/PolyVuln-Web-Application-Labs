@@ -1,0 +1,5 @@
+account_number,customer,document,ssn_last4,status,reviewer
+4021424008,Daniel Carter,drivers_license,4471,approved,branch-012
+4021988976,Priya Raman,drivers_license,9082,approved,branch-003
+4021481201,Sofia Alvarez,proof_of_address,2316,pending,
+4021195089,Hannah Lee,drivers_license,7754,approved,branch-021

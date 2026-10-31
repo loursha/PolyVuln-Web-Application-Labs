@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pvb-web
+  namespace: polyvuln-bank
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: pvb-web } }
+  template:
+    metadata: { labels: { app: pvb-web } }
+    spec:
+      containers:
+        - name: web
+          image: polyvuln/bank-web:4.12.3   # built from the repo Dockerfile
+          envFrom:
+            - configMapRef: { name: pvb-config }
+          env:
+            - name: DB_USER
+              valueFrom: { secretKeyRef: { name: pvb-secrets, key: DB_USER } }
+            - name: DB_PASS
+              valueFrom: { secretKeyRef: { name: pvb-secrets, key: DB_PASS } }
+            - name: GATEWAY_SIGNING_KEY
+              valueFrom: { secretKeyRef: { name: pvb-secrets, key: GATEWAY_SIGNING_KEY } }
+          ports: [{ containerPort: 80 }]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pvb-web
+  namespace: polyvuln-bank
+spec:
+  type: NodePort
+  selector: { app: pvb-web }
+  ports: [{ port: 80, targetPort: 80, nodePort: 30080 }]

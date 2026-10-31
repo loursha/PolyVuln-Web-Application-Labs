@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pvb-db-init
+  namespace: polyvuln-bank
+data:
+  # Schema and seed are mounted from the repo via kustomize/configMapGenerator in practice;
+  # for a quick start, apply them with: kubectl exec ... < db/init/*.sql
+  README: "Load db/init/01_schema.sql then 02_seed.sql into the pvb-db pod."
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pvb-db
+  namespace: polyvuln-bank
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: pvb-db } }
+  template:
+    metadata: { labels: { app: pvb-db } }
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          args: ["--default-authentication-plugin=mysql_native_password"]
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom: { secretKeyRef: { name: pvb-secrets, key: MYSQL_ROOT_PASSWORD } }
+            - name: MYSQL_DATABASE
+              value: polybank
+          ports: [{ containerPort: 3306 }]
+          volumeMounts: [{ name: data, mountPath: /var/lib/mysql }]
+      volumes: [{ name: data, emptyDir: {} }]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pvb-db
+  namespace: polyvuln-bank
+spec:
+  selector: { app: pvb-db }
+  ports: [{ port: 3306, targetPort: 3306 }]
